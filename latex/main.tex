@@ -1,0 +1,353 @@
+\documentclass{pid}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+
+\begin{document}
+\begin{frontmatter}
+
+\title{Procesamiento de imagenes digitales } 
+\title{Filtro bokeh basado en la segmentación fondo/figura}
+\author{ Santiago Juan Tarrio Gete  }
+\author{ Angel Franco Álvarez  }
+\mbox{ y }
+\author{Francisco Miguel Pérez Canales}
+\maketitle
+
+\begin{abstract}
+\noindent
+El resumen debe tener como máximo 250 palabras y ser un único párrafo. El resumen debe describir lo más fielmente posible el trabajo realizado (no el propuesto inicialmente, que podría ser distinto). Aquí se presentan las indicaciones para realizar el trabajo de PID, al mismo tiempo que la estructura que debe tener la documentación a presentar. Se puede usar el Fichero \url{ejemplo.tex} como plantilla, que es el que se ha usado en este documento.
+
+\end{abstract}
+
+\begin{keyword} palabras clave (hasta cinco palabras que clasifiquen el trabajo) \sep pid \sep instrucciones\sep trabajo \sep imagen digital \end{keyword}
+\end{frontmatter}
+
+\section{Introducción}
+
+El trabajo de PID debe ser un trabajo que se realiza en grupo para profundizar en algún o algunos aspectos del procesamiento de imágenes digitales. Los alumnos deben trabajar sobre un tema concreto de procesamiento de imágenes {\bf apoyándose en artículo(s) de investigación} relativamente reciente(s).
+La filosofía de los trabajos dirigidos consiste en la realización de una {\bf aplicación didáctica}, extrayendo las ideas principales de la documentación utilizada. Esto significa, por tanto, que {\bf no} debe hacerse una transcripción exacta de lo que aparece en el artículo de investigación referenciado. La aplicación (así como la documentación y la exposición) debe enseñar cómo se resuelve el problema planteado, explicando cada uno de los pasos requeridos para llegar al resultado final.
+
+\section{Planteamiento teórico}
+
+La sección planteamiento teórico debe plantear el problema a resolver, así como describir los algoritmos o procesos a realizar para su resolución.
+
+En el portal OPERA, al que se accede en la dirección \url{https://opera.eii.us.es/pid}, se administrará la lista de trabajos, donde hay que identificarse con el usuario virtual de la us y clave correspondiente para poder hacer las propuestas de este curso e inscribirse. El alumno debe poder ver la pestaña {\it Mi trabajo}, si no es así, debe consultar con los profesores.
+
+Para la búsqueda de artículos, se pueden consultar revistas internacionales así como bases de datos de revistas en el catálogo fama de la US \url{http://fama.us.es/}. Se recomienda la base de datos ScienceDirect(Elsevier) o IEEE Xplore. Si se accede desde casa, se debe pinchar el icono correspondiente (acceso desde casa) a la hora de seleccionar la base de datos que se desea consultar.
+
+Los grupos de trabajo deben ser preferiblemente de $3$ personas. El trabajo queda asignado a las personas que se inscriben en el portal. Todos los integrantes del grupo deben inscribirse. Para proponer un trabajo por parte de los alumnos, uno de ellos hará la propuesta en el mismo portal y esperará al visto bueno de los profesores. A continuación se inscriben los demás miembros del grupo.
+
+Se realizarán $4$ sesiones de control para seguimiento del trabajo, donde {\bf todos} los miembros del grupo explicarán la marcha del trabajo. De esta forma, obtendrán feedback de los profesores para seguir con el trabajo.
+
+ En la propuesta de trabajo asignado aparecerá un trabajo dirigido anterior (TDA) asociado que debe ser revisado por el grupo. Se proporcionará un cuestionario sobre ese TDA que debe ser entregado en OPERA con la segunda entrega.
+
+$$
+\begin{array}{c}
+\mbox{Hitos: }\\
+\begin{array}{|c|c|}\hline
+\mbox{ Entrega 1 }& \mbox{Propuesta con referencia bibliográfica de al menos un artículo de investigación}\\
+&  \mbox{Lista concisa de objetivos}\\
+\hline
+\mbox{ Entrega 2  }& \mbox{Cuestionario sobre el TDA y sobre elección de tecnología a usar}\\
+& \mbox{Planificación inicial}\\
+\hline
+\mbox{ Entrega 3 }& \mbox{Primera versión de la documentación. Primera versión de la aplicación.}\\
+& \mbox{Objetivos revisados. Hoja de tiempos hasta el momento.}\\
+\hline
+\mbox{ Entrega 4 }& \mbox{Primera versión de la presentación. Hoja de tiempos.}\\
+\hline
+\end{array}
+\end{array}$$
+
+
+{\bf Todos} los miembros de cada grupo deberán hacer una exposición final en clase en la que defiendan su proyecto y comenten los logros teóricos y de implementación obtenidos. Además, debe hacerse algún ejemplo usando el programa que se ha desarrollado (20 minutos en total).
+
+Las fechas de las sesiones de seguimiento y de la exposición final están publicadas en el calendario en la plataforma de enseñanza virtual. Las entregas se realizarán por medio del portal OPERA.
+
+Antes de la clase de exposiciones finales, se deberá subir a OPERA el trabajo (documentación, ejecutable y código):
+
+ \begin{itemize}
+\item \url{Documentacion.zip}.
+
+Documentacion.zip debe contener el fichero \url{.pdf} correspondiente a la documentación (también el \url{.tex} y las figuras \url{.png}, si se ha escrito en Latex). 
+
+\item \url{Codigo.zip}. Debe contener todo el código fuente utilizado.
+\item \url {Ejecutable.zip}. Debe contener la aplicación junto con todos los archivos necesarios para su ejecución de forma que no dé errores de compilación.
+Debe contener un {\bf leeme.txt} con instrucciones para ejecutar la aplicación.
+Se debe incluir una {\bf carpeta con imágenes de muestra}.
+
+\end{itemize}
+
+
+
+Una vez realizada la exposición en clase, se debe subir \url{presentacion.pdf} con la presentación que se ha usado en clase para exponer el trabajo.
+
+
+\section{Resolución Práctica}
+Si se usa java para un trabajo de imágenes 2D, se recomienda usar el paquete \url{ImageJ} que se puede descargar en \url{http://rsbweb.nih.gov/ij/}. El trabajo dirigido se puede insertar fácilmente como un plugin. Si se trabaja con Java y con imágenes 3D, se recomienda instalar el paquete Java3D que se puede descargar de la página \url{http://www.java3d.org/}. Si se desea trabajar en C++ o en Python, se recomienda usar la librería \url{openCV}, que se puede descargar de la página \url{http://opencv.org/downloads.html}. Matlab posee también un toolbox de procesamiento de imágenes que se puede usar en los laboratorios de la escuela. Éstas sólo son algunas indicaciones, no hay por qué usar nada de ello.
+
+Se debe realizar una planificación inicial del trabajo, estableciendo los hitos importantes en el desarrollo, tareas que hay que realizar y asignaciones de esas tareas a miembros del grupo. Se puede usar, por ejemplo, Projetsii \url{https://projetsii.informatica.us.es/} para realizar esta planificación inicial y posterior seguimiento del desarrollo del trabajo. Téngase en cuenta que las horas de dedicación de {\bf cada alumno} han de ser {\bf 70 horas} (correspondientes a 7 semanas de trabajo del alumno). Será obligatorio también presentar la revisión final de esta planificación o tabla de tiempos (Anexo I).
+
+\section{Planteamiento teórico}
+
+La sección planteamiento teórico debe plantear el problema a resolver, así como describir los algoritmos o procesos a realizar para su resolución.
+
+En el portal OPERA, al que se accede en la dirección \url{https://opera.eii.us.es/pid}, se administrará la lista de trabajos, donde hay que identificarse con el usuario virtual de la us y clave correspondiente para poder hacer las propuestas de este curso e inscribirse. El alumno debe poder ver la pestaña {\it Mi trabajo}, si no es así, debe consultar con los profesores.
+
+Para la búsqueda de artículos, se pueden consultar revistas internacionales así como bases de datos de revistas en el catálogo fama de la US \url{http://fama.us.es/}. Se recomienda la base de datos ScienceDirect(Elsevier) o IEEE Xplore. Si se accede desde casa, se debe pinchar el icono correspondiente (acceso desde casa) a la hora de seleccionar la base de datos que se desea consultar.
+
+Los grupos de trabajo deben ser preferiblemente de $3$ personas. El trabajo queda asignado a las personas que se inscriben en el portal. Todos los integrantes del grupo deben inscribirse. Para proponer un trabajo por parte de los alumnos, uno de ellos hará la propuesta en el mismo portal y esperará al visto bueno de los profesores. A continuación se inscriben los demás miembros del grupo.
+
+Se realizarán $4$ sesiones de control para seguimiento del trabajo, donde {\bf todos} los miembros del grupo explicarán la marcha del trabajo. De esta forma, obtendrán feedback de los profesores para seguir con el trabajo.
+
+ En la propuesta de trabajo asignado aparecerá un trabajo dirigido anterior (TDA) asociado que debe ser revisado por el grupo. Se proporcionará un cuestionario sobre ese TDA que debe ser entregado en OPERA con la segunda entrega.
+
+$$
+\begin{array}{c}
+\mbox{Hitos: }\\
+\begin{array}{|c|c|}\hline
+\mbox{ Entrega 1 }& \mbox{Propuesta con referencia bibliográfica de al menos un artículo de investigación}\\
+&  \mbox{Lista concisa de objetivos}\\
+\hline
+\mbox{ Entrega 2  }& \mbox{Cuestionario sobre el TDA y sobre elección de tecnología a usar}\\
+& \mbox{Planificación inicial}\\
+\hline
+\mbox{ Entrega 3 }& \mbox{Primera versión de la documentación. Primera versión de la aplicación.}\\
+& \mbox{Objetivos revisados. Hoja de tiempos hasta el momento.}\\
+\hline
+\mbox{ Entrega 4 }& \mbox{Primera versión de la presentación. Hoja de tiempos.}\\
+\hline
+\end{array}
+\end{array}$$
+
+
+{\bf Todos} los miembros de cada grupo deberán hacer una exposición final en clase en la que defiendan su proyecto y comenten los logros teóricos y de implementación obtenidos. Además, debe hacerse algún ejemplo usando el programa que se ha desarrollado (20 minutos en total).
+
+Las fechas de las sesiones de seguimiento y de la exposición final están publicadas en el calendario en la plataforma de enseñanza virtual. Las entregas se realizarán por medio del portal OPERA.
+
+Antes de la clase de exposiciones finales, se deberá subir a OPERA el trabajo (documentación, ejecutable y código):
+
+ \begin{itemize}
+\item \url{Documentacion.zip}.
+
+Documentacion.zip debe contener el fichero \url{.pdf} correspondiente a la documentación (también el \url{.tex} y las figuras \url{.png}, si se ha escrito en Latex). 
+
+\item \url{Codigo.zip}. Debe contener todo el código fuente utilizado.
+\item \url {Ejecutable.zip}. Debe contener la aplicación junto con todos los archivos necesarios para su ejecución de forma que no dé errores de compilación.
+Debe contener un {\bf leeme.txt} con instrucciones para ejecutar la aplicación.
+Se debe incluir una {\bf carpeta con imágenes de muestra}.
+
+\end{itemize}
+
+
+
+Una vez realizada la exposición en clase, se debe subir \url{presentacion.pdf} con la presentación que se ha usado en clase para exponer el trabajo.
+
+
+\section{Resolución Práctica}
+
+Esta sección debe incluir la descripción de la implementación (pero no el código), especificando las tecnologías usadas, cómo se ha diseñado la aplicación, cuáles son su módulos o partes principales. {\it Debe quedar muy claro cuál es la parte original implementada en el programa, qué librerías se han usado y de dónde se han cogido, con referencias apropiadas.}
+
+Se debe describir (tanto en la aplicación, como en la documentación, como en la presentación) los pasos seguidos para resolver el problema que se plantea de la forma más divulgativa posible.
+
+Se puede usar el lenguaje de programación que se quiera. Se pueden usar librerías o códigos fuentes de trabajos de otros años, de internet, etc., siempre y cuando se referencien adecuadamente.
+
+Si se usa java para un trabajo de imágenes 2D, se recomienda usar el paquete \url{ImageJ} que se puede descargar en \url{http://rsbweb.nih.gov/ij/}. El trabajo dirigido se puede insertar fácilmente como un plugin. Si se trabaja con Java y con imágenes 3D, se recomienda instalar el paquete Java3D que se puede descargar de la página \url{http://www.java3d.org/}. Si se desea trabajar en C++ o en Python, se recomienda usar la librería \url{openCV}, que se puede descargar de la página \url{http://opencv.org/downloads.html}. Matlab posee también un toolbox de procesamiento de imágenes que se puede usar en los laboratorios de la escuela. Éstas sólo son algunas indicaciones, no hay por qué usar nada de ello.
+
+Se debe realizar una planificación inicial del trabajo, estableciendo los hitos importantes en el desarrollo, tareas que hay que realizar y asignaciones de esas tareas a miembros del grupo. Se puede usar, por ejemplo, Projetsii \url{https://projetsii.informatica.us.es/} para realizar esta planificación inicial y posterior seguimiento del desarrollo del trabajo. Téngase en cuenta que las horas de dedicación de {\bf cada alumno} han de ser {\bf 70 horas} (correspondientes a 7 semanas de trabajo del alumno). Será obligatorio también presentar la revisión final de esta planificación o tabla de tiempos (Anexo I).
+
+
+\subsection{Sobre la documentación}
+
+ Para poder trabajar en Latex, hay que visitar la página \url{http://www.miktex.org/} y bajarse el paquete Miktex 2.8.
+Se recomienda usar el editor TexnicCenter, que se puede bajar en  http://www.texniccenter.org en Download, pinchando en TexnicCenter installer y ejecutar el archivo.
+En la página \url{http://navarroj.com/latex/winlatex.html} podéis encontrar una pequeña guía de cómo instalar tales ficheros.
+
+Sugerimos usar el fichero \url{ejemplo.tex} como plantilla para el documento y el fichero \url{pid.cls} como fichero de estilo.
+Tales ficheros podrán descargarse en opera.
+
+Estructura de la documentación:
+
+\begin{enumerate}
+\item  Resumen.
+\item  Introducción.
+\item  Planteamiento teórico.
+\item  Resolución práctica.
+\item  Experimentación.
+\item  Manual de usuario.
+\item  Conclusiones.
+\item  Referencias.
+\item  Anexo: Tabla de tiempos.
+\end{enumerate}
+
+Véase el Anexo II para algunos apuntes rápidos sobre escritura de textos en LaTex.
+
+\section{Experimentación}
+
+Una sección de ejemplos comentados y pruebas realizadas con el programa desarrollado es imprescindible en este trabajo. Igualmente importantes serán las conclusiones que se puedan obtener de la experimentación realizada.
+
+\section{Manual de usuario}
+
+Se debe incluir un breve manual de usuario. Este manual se incluirá también en la misma aplicación.
+
+\section{Conclusiones}
+Introducir una sección de conclusiones que incluya propuestas claras de mejora o extensión del trabajo (por ejemplo, si no se han podido alcanzar todos los objetivos iniciales). También conclusiones sobre los resultados obtenidos, en qué medida difieren de los esperados. También son apropiadas conclusiones sobre las desviaciones en cuanto a la planificación inicial y conclusiones sobre la experiencia de la realización del trabajo.
+
+
+\section{Referencias}
+
+Las referencias se citan así:
+bla, bla \cite{clave:revista}, bla, bla \cite{clave:libro}. La bibliografía
+debe seguir el estilo de este documento. A continuación aparecen dos ejemplos de referencias bibliográficas: un artículo en una revista y un libro.
+
+\begin{verbatim}
+\begin{thebibliography}{9}
+\bibitem{clave:revista}
+Y. O. Mismo, ``Título del artículo", \emph{Revista Publicación Periódica},
+Vol. 17, pp. 1-100, 1997.
+
+\bibitem{clave:libro}
+U. N. Experto, \emph{Un libro que escribí}, Editorial, 1996.
+\end{thebibliography}
+\end{verbatim}
+
+El resultado de estos ejemplos puede verse a continuación, con las referencias ordenadas alfabéticamente por autores.
+
+
+
+\begin{thebibliography}{10}
+\bibitem{clave:libro}
+U. N. Experto, \emph{Un libro que escribí},
+Editorial, 1996.
+
+\bibitem{clave:revista}
+Y. O. Mismo,
+``Título del artículo'',
+\emph{Revista Publicación Periódica}, Vol. 17, pp. 1-100, 1997.
+
+%\bibitem{clave:url}
+%\url{http://asignatura.us.es/imagendigital/}
+
+
+\end{thebibliography}
+\newpage
+\noindent {\bf Anexo I: Tabla de tiempos}
+
+
+Se debe justificar el trabajo realizado por cada componente del grupo, indicando el {\bf tiempo total que cada miembro del grupo ha dedicado} al trabajo (lo que puede implicar diferencia de notas obtenidas por los distintos miembros del grupo). El trabajo realizado debe ser de {\bf 70 horas por alumno}. Además, debe haber un plan de trabajo detallado con las tareas realizadas por cada miembro del grupo. Para esto último, se puede usar la tabla siguiente o bien documentos generados por la herramienta de gestión de proyectos que se use, como Projetsii o Microsoft Project, por ejemplo.
+$$\begin{array}{|c|c|c|c|c|c|}
+\hline
+\mbox{ Fecha de la
+ actividad }
+& \mbox{ Inicio }
+& \mbox{ Fin }
+&\mbox{ Tiempo
+total
+empleado }
+&	\mbox{
+Miembros
+del grupo
+}
+&	\mbox{ Actividad }\\\hline
+\mbox{ }&\mbox{}&\mbox{ }&\mbox{}&\mbox{ }&\mbox{}\\
+\mbox{ }&\mbox{}&\mbox{ }&\mbox{}&\mbox{ }&\mbox{}\\\hline\end{array}$$
+
+\newpage
+\noindent {\bf Anexo II: Cómo introducir ciertos elementos en LaTex}
+
+\noindent Teoremas y similares.
+
+Algunos ejemplos:
+
+ Lema:
+
+\begin{lem}
+Donec lorem. Ut risus. Praesent vitae odio. Donec gravida bibendum eros.
+\end{lem}
+
+Conjetura:
+
+\begin{conj}
+Donec auctor magna et odio. In urna elit, faucibus ac, facilisis non, lobortis quis, quam.
+\end{conj}
+
+Teorema:
+
+\begin{thm}
+Ut vehicula urna eget eros.
+\end{thm}
+
+\begin{pf}
+Demo, demo, demo
+
+Demo\qed
+\end{pf}
+
+Corolario:
+
+\begin{cor}
+Duis ut dui nec dolor vulputate faucibus. Nunc quis urna varius libero sollicitudin volutpat. Fusce est neque, tristique et, gravida in, tempus a, tellus
+\end{cor}
+
+También puede usar de una forma similar a las anteriores los entornos  axiom (Axioma), conj (Conjetura), fact (Hecho), hypo (Hipótesis),  prop (Proposición), crit (Criterio), defn (Definición), exmp (Ejemplo), rem (Observación), prob (Problema), prin (Principio), alg (Algoritmo), note (Nota), summ (Sumario) y case (Caso).
+
+\noindent Gráficos.
+
+Puede utilizar el entorno \texttt{graphics} de \LaTeX{} para incluir sus gráficos. Recomendamos utilizar pdflatex y utilizar ficheros gráficos en \url{.png}.
+
+En cualquier caso recuerde que para la versión definitiva de su documento debe enviarnos
+junto con el fichero fuente \LaTeX{} los gráficos que se deban incluir, además del fichero \textsc{pdf}. Procure evitar los ficheros \texttt{.bmp}, usando en su lugar el formato  \texttt{.png}.
+
+
+
+\begin{figure}[b]
+\begin{center}
+\includegraphics[width=0.9\columnwidth]{JRPFposicionescilindro00}
+\end{center}
+\caption{Ejemplo de figura}%
+\label{fig0}%
+\end{figure}
+
+Nótese que puede usar
+\begin{verbatim}
+\includegraphics [width=0.9\columnwidth]{}
+\end{verbatim} y otras opciones similares para manejar el tamaño de la figura.
+
+\noindent Expresiones matemáticas.
+
+Cualquier expresión matemática que se use en LaTex, deberá ir encerrada entre dos signos del carácter dolar (\$).
+
+Superíndices: $x^1$, $x^{1,2,a}$.
+
+Subíndices: $x_1$, $x_{1,2,a}$.
+
+Superíndices y Subíndices: $x_1^2$, $x_{1,2,a}^{1,2,a}$.
+
+Funciones: $\cos x, \sen x, \ln x, \dots$.
+
+Cocientes: $\frac{4234}{x^2\cdot \sin x}$.
+
+Flechas y caracteres encima del texto: $\bar{x}, \overline{pid}, \vec{x}, \tilde{x}, \widetilde{pid}, \hat{x}, \widehat{pid}$.
+
+Signos de Derivación.: $\nabla, \partial x, \dot x, \ddot x$.
+
+Conjuntos: $\forall x, \in, \subseteq, A \cap B, \cup, \exists$.
+
+Raíces: $\sqrt{235}, \sqrt[n]{345}$.
+
+Relaciones: $\sim, \simeq, \ge, \le, \equiv, \not\equiv, \approx, \ne$.
+
+Geometría: $\triangle, \angle, \perp, \circ$.
+
+Otros: $\oplus, \dagger, \pm, \mp, \hbar, \star, \cdot, \times, \bullet, \infty, \ell$.
+
+Sumatorios: $\sum, \sum_{n=1}^{infty} x^n$
+
+Producto: $\prod, \prod_{n=1}^2 x^n$
+
+Integrales: $\int, \int_{a}^b x^n, \displaystyle\oint_{A} x^n$.
+
+\end{document}
