@@ -32,7 +32,30 @@ lista_saliency_map = [rgb1,rgb2,rgb3,lab1,lab2,lab3]
 
 
 
-
+def generar_grid(tam_x,tam_y,tam_celda):
+    
+    #dato -> (pos_x,pos_y)
+    def iterador_grid():
+        #a: valor que va incrementandose hasta alcanzar el tamaño en x de la imagen
+        #b: valor que va incrementandose hasta alcanzar el tamaño en y de la imagen
+        #m: valor que se va actualizando que informa si se ha traspasado el tamaño de una celda (en x) en cada iteración
+        a = 0
+        b = 0
+        m = 0
+        while b < tam_y:
+            while a < tam_x:
+                if(m == 0):
+                    yield (b,a)
+                    m = tam_celda
+                else:
+                    m-=1
+                a+=1
+            b+=tam_celda+1
+            m=0
+            a=0
+    return list(iterador_grid())
+            
+''''
 def generar_grid(tam_x,tam_y,tam_celda):
     #Inicialización grid
     grid = []
@@ -66,11 +89,24 @@ def generar_grid(tam_x,tam_y,tam_celda):
             grid.append(tipo1)
             m-=1
     return np.array(grid,dtype='uint8')
-    
+
+'''
+
 #Genera un grid segun una imagen como array de numpy
-def generar_grid_segun_array(imagen,tam_celda):
-    shape = np.shape(imagen)
+def generar_grid_segun_array(array_imagen,tam_celda):
+    shape = np.shape(array_imagen)
     return generar_grid(shape[1],shape[0],tam_celda)
+
+
+def interseccion_grid_imagen_segun_array(array_imagen,tam_celda):
+    grid = generar_grid_segun_array(array_imagen,tam_celda)
+    
+    resultado = []
+    for (x,y) in grid:
+        resultado.append((x,y,array_imagen[x][y]))
+    return resultado
+    
+    #return [(x,y,pixel) for (y,fila) in enumerate(array_imagen) for (x,pixel) in enumerate(fila)  if (x,y) in grid]
     
 #Comandos de prueba
 #io.imshow(generar_grid(10,10,2))
