@@ -99,8 +99,18 @@ def generar_grid_a_traves_imagen_y_opcion(array_imagen,tam_celda,opcion=0):
 
 #Genera la misma imagen pasada por parametros con un grid solapado.
 def generar_imagen_con_grid(nombre_fichero,array_imagen,tam_celda):
-   pass #TODO
+    shape = np.shape(array_imagen)
+    def suma_pixel(l1,l2):
+        r1 = 0 if l2[0] == 0 else l1[0]
+        r2 = 0 if l2[1] == 0 else l1[1]
+        r3 = 0 if l2[2] == 0 else l1[2]
+        return [r1,r2,r3]
+    def suma_imagenes(arr1,arr2):
+        return [[suma_pixel(arr1[y][x],arr2[y][x]) for x in range(shape[1])] for y in range(shape[0])]
     
+    grid = generar_grid_a_traves_imagen_y_opcion(array_imagen,tam_celda,1)
+    resultado = suma_imagenes(array_imagen,grid)
+    io.imsave(nombre_fichero,np.array(resultado,dtype='uint8'))
     
 
 
@@ -125,4 +135,5 @@ def generar_imagen_interseccion(nombre_fichero,array_imagen,tam_celda):
 #generar_imagen_interseccion('imagen_interseccion.png',rgb,1)
 #generar_imagen_interseccion('imagen_interseccion2.png',rgb,10)
 
-#io.imsave('celda.png',generar_grid_a_traves_imagen_y_opcion(rgb,10,1))
+#generar_imagen_con_grid('imagen_con_celda_solapada.png',rgb,1)
+#generar_imagen_con_grid('imagen_con_celda_solapada2.png',rgb,10)
