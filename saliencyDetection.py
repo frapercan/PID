@@ -113,16 +113,16 @@ def generar_imagen_con_grid(nombre_fichero,array_imagen,tam_celda):
     io.imsave(nombre_fichero,np.array(resultado,dtype='uint8'))
     
 
+#Funcion que devuelve los puntos de interseccion con su información de posicion y de canales.
+def puntos_interseccion(array_imagen,tam_celda):
+    grid = generar_grid_a_traves_imagen_y_opcion(array_imagen,tam_celda)
+    resultado = []
+    for (y,x) in grid:
+        resultado.append((y,x,array_imagen[y][x]))
+    return resultado
 
 #Genera una imagen solo con los puntos de intersección del grid con la imagen pasada por parametros.
 def generar_imagen_interseccion(nombre_fichero,array_imagen,tam_celda):
-    
-    def puntos_interseccion(array_imagen,tam_celda):
-        grid = generar_grid_a_traves_imagen_y_opcion(array_imagen,tam_celda)
-        resultado = []
-        for (y,x) in grid:
-            resultado.append((y,x,array_imagen[y][x]))
-        return resultado
     
     shape = np.shape(array_imagen)
     interseccion = puntos_interseccion(array_imagen,tam_celda)
@@ -137,3 +137,5 @@ def generar_imagen_interseccion(nombre_fichero,array_imagen,tam_celda):
 
 #generar_imagen_con_grid('imagen_con_celda_solapada.png',rgb,1)
 #generar_imagen_con_grid('imagen_con_celda_solapada2.png',rgb,10)
+
+#puntos_interseccion(rgb,10)
