@@ -19,7 +19,7 @@
   <body>
 
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="#">Trabajo PID - Grupo 4</a>
+      <a class="navbar-brand" href="./">Trabajo PID - Grupo 4</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -38,9 +38,13 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Subir imagen</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
+              <form class="px-4 py-3" method="post" action="./upload" enctype="multipart/form-data">{% csrf_token %}
+                <div class="form-group">
+                  <label for="subirImagen">Selecciona una imagen:</label>
+                  <input type="file" class="form-control" id="subirImagen" name="imageFile">
+                </div>
+                <button type="submit" class="btn btn-success">Subir</button>
+              </form>
             </div>
           </li>
         </ul>
@@ -50,7 +54,32 @@
     <main role="main">
 
       <div class="container" style="margin-top:70px">
-        Aquí se verá el listado de pruebas, con su imagen original y el resultado de la prueba.
+
+        {% for prueba in pruebas %}
+        <div class="row justify-content-center">
+          <div class="col-sm-3">
+            <div class="card" style="width: 15rem;">
+              <img class="card-img-top" src="{{prueba.original.archivo.url}}" alt="Card image cap" style="height:200px;width:238px">
+              <div class="card-body">
+                <h5 class="card-title">Original</h5>
+                <p class="card-text">Relleno y forraje relleno y forraje relleno y forraje relleno y forraje relleno y forraje relleno y forraje.</p>
+
+              </div>
+            </div>
+            </div>
+            <div class="col-sm-3">
+            <div class="card" style="width: 15rem;">
+              <img class="card-img-top" src="{{prueba.resultado.archivo.url}}" alt="Card image cap" style="height:200px;width:238px">
+              <div class="card-body">
+                <h5 class="card-title">Resultado</h5>
+                <p class="card-text">Relleno y forraje relleno y forraje relleno y forraje relleno y forraje relleno y forraje relleno y forraje.</p>
+
+              </div>
+            </div>
+          </div>
+          </div>
+        {% endfor %}
+
       </div> <!-- /container -->
 
     </main>
