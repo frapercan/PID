@@ -56,10 +56,10 @@
       <!-- Main jumbotron for a primary marketing message or call to action -->
       <div class="jumbotron">
         <div class="container">
-          <h4 class="display-4">Grupo 3</h4>
+          <h4 class="display-4">Grupo 4</h4>
           <h4 class="display-5">Filtro bokeh basado en la segmentación fondo/figura.</h4>
           <p>---Rellenar con el abstract de la memoria cuando lo tengamos---</p>
-          <p><a class="btn btn-primary" href="#" role="button">Ver resultados &raquo;</a></p>
+          <p><a class="btn btn-primary" href="./pruebas" role="button">Ver pruebas &raquo;</a></p>
         </div>
       </div>
 
@@ -97,10 +97,26 @@
         <hr/>
         <div class="row justify-content-center">
           <div class="col-sm-3">
-            <p><a class="btn btn-primary ejecutar" href="./run?imagePk=5" role="button">Ejecutar</a></p>
+            <p>
+              <form method="get" action="./run">
+                <label for="gridSize">Definir un tamaño de grid:</label>
+                <input id="gridSize" class="form-control" name="gridSize"/>
+                <input type="hidden" class="ejecutar" value="{{imagen.pk}}" name="imagePk"/>
+                <button type="submit" class="btn btn-primary">Ejecutar</button>
+              </form>
+
+            </p>
           </div>
           <div class="col-sm-3">
-            <p><a class="btn btn-success" href="./imagenes" role="button">Ejecutar paso a paso</a></p>
+            <p>
+              <form method="get" action="./imagenes">
+                <label for="gridSize">Definir un tamaño de grid:</label>
+                <input id="gridSize" class="form-control" name="gridSize"/>
+                <input type="hidden" class="ejecutar" value="{{imagen.pk}}" name="imagePk"/>
+                <button type="submit" class="btn btn-success">Ejecutar paso a paso</button>
+              </form>
+
+            </p>
           </div>
         </div>
 
@@ -125,7 +141,7 @@
 $(function() {
 
   $(".selector").click(function(){
-    $(".ejecutar").attr("href","./run?imagePk="+$(this).attr("id"));
+    $(".ejecutar").attr("value",$(this).attr("id"));
   });
 
       });

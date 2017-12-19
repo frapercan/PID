@@ -43,7 +43,7 @@ def run(request):
     new_test = Prueba(original=image_selected,resultado=image_selected)
     new_test.save()
     context = {
-        'image_url':call_to_action(image_pk,new_test.pk),
+        'image_url':call_to_action(image_pk,new_test.pk,request.GET['gridSize']),
         'image':image_selected
     }
     return render(request,'pidproject/run.html',context)

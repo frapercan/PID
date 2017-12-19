@@ -54,6 +54,8 @@
     <main role="main">
 
       <div class="container" style="margin-top:70px">
+        <h3>Imágenes disponibles</h3>
+        <hr/>
         <div class="row">
         {% for imagen in imagenes %}
           <div class="col-sm-3">
@@ -62,7 +64,12 @@
               <div class="card-body">
                 <h5 class="card-title">{{imagen.nombre}}</h5>
                 <p class="card-text">Relleno y forraje relleno y forraje relleno y forraje relleno y forraje relleno y forraje relleno y forraje.</p>
-                <a href="./run?imagePk={{imagen.pk}}" class="btn btn-primary">Ejecutar algoritmo</a>
+                <form method="get" action="./run">
+                <label for="gridSize">Definir un tamaño de grid:</label>
+                <input id="gridSize" class="form-control" name="gridSize"/>
+                <input type="hidden" value="{{imagen.pk}}" name="imagePk"/>
+                <button type="submit" class="btn btn-primary">Ejecutar algoritmo</button>
+              </form>
               </div>
             </div>
           </div>
