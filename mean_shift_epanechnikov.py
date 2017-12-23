@@ -1,8 +1,11 @@
 import numpy as np
 
 import mean_shift_utils_epanechnikov as ms_utils
+import point_grouper as pg
 
-MIN_DISTANCE = 0.000001
+
+#EN EL ARCHIVO ORIGNAL ESTABA COMO: MIN_DISTANCE = 0.000001
+MIN_DISTANCE = 3
 
 class MeanShift(object):
     def __init__(self, kernel=ms_utils.gaussian_kernel):
@@ -34,6 +37,7 @@ class MeanShift(object):
             for i in range(0, len(shift_points)):
                 if not still_shifting[i]:
                     continue
+                print(i)
                 p_new = shift_points[i]
                 p_new_start = p_new
                 p_new = self._shift_point(p_new, points, kernel_bandwidth)
@@ -65,5 +69,9 @@ class MeanShift(object):
         """recibe una lista  donde los puntos se han desplazado para formar un cluster"""
         return shifted_point
 
-
+class MeanShiftResult:
+    def __init__(self, original_points, shifted_points, cluster_ids):
+        self.original_points = original_points
+        self.shifted_points = shifted_points
+        self.cluster_ids = cluster_ids
 

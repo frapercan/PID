@@ -4,6 +4,7 @@ Created on Tue Dec 19 18:30:01 2017
 Procesamiento de Imagenes Digitales.
 """
 
+from PIL import Image
 from skimage import io, color
 import numpy as np
 
@@ -31,11 +32,18 @@ HSV = np.array(color.rgb2hsv(RGB))
 
 import grid_utils as grid
 #Extraer los puntos de la imagen que tienen intersección con el Grid
+#ORIGINALMENTE ERAN 100
 
-LISTA_PUNTOS = grid.extrae_puntos_grid_imagen(RGB, 100)
 
+
+LISTA_PUNTOS = grid.extrae_puntos_grid_imagen(RGB, 600)
+print(np.shape(LISTA_PUNTOS))
 import mean_shift_epanechnikov as ms
 #Utilizar el algoritmo meanshift sobre la lista de puntos. 5 Dimensiones + 1 de la clasificación
 
 mean_shifter = ms.MeanShift(kernel = 'epanechnikov_kernel')
-mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS, kernel_bandwidth = [0.2,0.2])
+#ORIGINALMENTE ERA [0.2,0.2]
+mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS, kernel_bandwidth = [30,30])
+
+#img = Image.fromarray(mean_shift_result.shifted_points,'RGB')
+#img.save('a.png')
