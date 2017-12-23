@@ -58,9 +58,34 @@ def extrae_puntos_grid_imagen(img, divisiones):
                 LISTA_PUNTOS.append([i,j,img[i][j][0],img[i][j][1],img[i][j][2]])
     return np.array(LISTA_PUNTOS)
 
+  
+def visualizar_clusteres(imagen_original,mean_shift_result):
+    """Devuelve un array con la imagen clusterizada.
 
+    Esta imagen tendrá tantos colores como clusteres haya detectado el resultado
+    del algoritmo MeanShift pasado por parametro
 
+    Args:
+        imagen_original: El array de la imagen original antes de aplicarle el 
+        algoritmo de mallado
+        mean_shift_result: Resultado del mean_shift aplicado a la imagen original
 
+    Returns:
+           Un array de la imagen que da como resultado el mallado coloreado con los diferentes clusters.
+            
+    """
+    shape = np.shape(imagen_original)
+    clases = {}
+    resultado = np.zeros((shape),dtype='uint8')
+    resultado.flags.writeable = True
+    puntos_originales = list(mean_shift_result.original_points)
+    for (i,j) in list(enumerate(mean_shift_result.cluster_ids)):
+        if not (j in clases):
+            clases.update({j:[puntos_originales[i][2],puntos_originales[i][3],puntos_originales[i][4]]})
+        else:
+            color = clases.get(j)
+            resultado[puntos_originales[i][0],puntos_originales[i][1]]= color
+    return resultado
 
 
 

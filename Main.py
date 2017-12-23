@@ -9,7 +9,7 @@ from skimage import io, color
 import numpy as np
 
 ##Imagen de muestra en el mismo directorio del archivo
-RGB = np.array(io.imread("sea.jpg"))
+RGB = np.array(io.imread("balloon.jpg"))
 
 LAB = np.array(color.rgb2lab(RGB))
 
@@ -36,14 +36,14 @@ import grid_utils as grid
 
 
 
-LISTA_PUNTOS = grid.extrae_puntos_grid_imagen(RGB, 600)
+LISTA_PUNTOS = grid.extrae_puntos_grid_imagen(RGB, 20)
 print(np.shape(LISTA_PUNTOS))
 import mean_shift_epanechnikov as ms
 #Utilizar el algoritmo meanshift sobre la lista de puntos. 5 Dimensiones + 1 de la clasificación
-
 mean_shifter = ms.MeanShift(kernel = 'epanechnikov_kernel')
 #ORIGINALMENTE ERA [0.2,0.2]
-mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS, kernel_bandwidth = [30,30])
+mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS, kernel_bandwidth = [200,255])
+res = grid.visualizar_clusteres(RGB,mean_shift_result)
 
-#img = Image.fromarray(mean_shift_result.shifted_points,'RGB')
-#img.save('a.png')
+img = Image.fromarray(res,'RGB')
+img.save('cluster_balloon.png','png')

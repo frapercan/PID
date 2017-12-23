@@ -5,7 +5,7 @@ import point_grouper as pg
 
 
 #EN EL ARCHIVO ORIGNAL ESTABA COMO: MIN_DISTANCE = 0.000001
-MIN_DISTANCE = 3
+MIN_DISTANCE = 0.001
 
 class MeanShift(object):
     def __init__(self, kernel=ms_utils.gaussian_kernel):
