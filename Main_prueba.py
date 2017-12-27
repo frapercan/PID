@@ -32,6 +32,8 @@ HSV = np.array(color.rgb2hsv(RGB))
 #HSV2 = filters.gaussian(HSV,GAUSSIAN_KERNELS[1])
 #HSV3 = filters.gaussian(HSV,GAUSSIAN_KERNELS[2])
 
+import foreground_estimation
+
 import grid_utils as grid
 #Extraer los puntos de la imagen que tienen intersección con el Grid
 #ORIGINALMENTE ERAN 100
