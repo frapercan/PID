@@ -52,7 +52,7 @@ for i in range(alto):
 LISTA_PUNTOS = np.array(LISTA_PUNTOS)
 np.shape(LISTA_PUNTOS)
          
-LISTA_PUNTOS = grid.extrae_puntos_grid_imagen(RGB2, 30)
+LISTA_PUNTOS = grid.extrae_puntos_grid_imagen(RGB2, 50)
 print(np.shape(LISTA_PUNTOS))
 import mean_shift_epanechnikov as ms
 #Utilizar el algoritmo meanshift sobre la lista de puntos. 5 Dimensiones + 1 de la clasificación
@@ -63,3 +63,10 @@ res = grid.visualizar_clusteres(RGB2,mean_shift_result)
 
 img = Image.fromarray(res,'RGB')
 img.save('cluster_sea.png','png')
+
+
+x_y_c = foreground_estimation.cambia_formato(mean_shift_result)
+
+
+
+

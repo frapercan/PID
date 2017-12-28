@@ -37,7 +37,6 @@ class MeanShift(object):
             for i in range(0, len(shift_points)):
                 if not still_shifting[i]:
                     continue
-                print(i)
                 p_new = shift_points[i]
                 p_new_start = p_new
                 p_new = self._shift_point(p_new, points, kernel_bandwidth)
