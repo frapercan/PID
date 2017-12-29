@@ -12,8 +12,8 @@ def call_to_action(image_pk,test_pk,grid_size):
 
     ms_data = puntos_interseccion(np.array(image_for_pil),int(grid_size))
     print(len(ms_data))
-    mean_shifter = ms.MeanShift(kernel='multivariate_gaussian')
-    mean_shift_result = mean_shifter.cluster(ms_data,kernel_bandwidth=[20,20,10,10,10])
+    mean_shifter = ms.MeanShift(kernel='epanechnikov_kernel')
+    mean_shift_result = mean_shifter.cluster(ms_data,kernel_bandwidth=[250,150])
     original_points =  mean_shift_result.original_points
     shifted_points = mean_shift_result.shifted_points
     cluster_assignments = mean_shift_result.cluster_ids

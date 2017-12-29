@@ -10,6 +10,14 @@ def euclidean_dist(pointA, pointB):
         total += (pointA[dimension] - pointB[dimension])**2
     return math.sqrt(total)
 
+def neighbourhood_points(X, x_centroid, distance = 5):
+    eligible_X = []
+    for x in X:
+        distance_between = euclidean_dist(x, x_centroid)
+        # print('Evaluating: [%s vs %s] yield dist=%.2f' % (x, x_centroid, distance_between))
+        if distance_between <= distance:
+            eligible_X.append(x)
+    return np.array(eligible_X)
 
 def gaussian_kernel(distance, bandwidth, e=1):
     euclidean_distance = np.sqrt(((distance)**2).sum(axis=1))
@@ -41,9 +49,9 @@ def epanechnikov_kernel(distance,bw,e=1):
     #print(np.array([np.linalg.norm(distance_s[i]) for i in range(len(distance_s)) ]))
     #print(np.array([np.linalg.norm(distance_r[i]) for i in range(len(distance_r)) ]))
 
-    val = (e/(bw[0]**2)*(bw[1]**2))*ek_s*ek_r
+    val = (e/((bw[0]**2)*(bw[1]**2)))*ek_s*ek_r
 
     return val
 
 def epanechnikov_profile(values):
-    return np.array([1-x if np.linalg.norm(x)<=1 else 0 for x in values])
+    return np.array([0.75*(1-x**2) if np.linalg.norm(x)<=1 else 0 for x in values])
