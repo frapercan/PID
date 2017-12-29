@@ -11,6 +11,8 @@ def euclidean_dist(pointA, pointB):
     return math.sqrt(total)
 
 def neighbourhood_points(X, x_centroid, distance = 5):
+    """ Devuelve los puntos del conjunto X que estan en el vecindario del punto x_centroid, es decir,
+    a una distancia menor a distance. """
     eligible_X = []
     for x in X:
         distance_between = euclidean_dist(x, x_centroid)
@@ -54,4 +56,6 @@ def epanechnikov_kernel(distance,bw,e=1):
     return val
 
 def epanechnikov_profile(values):
+    # Kernel de Paco sacado de https://saravananthirumuruganathan.wordpress.com/2010/04/01/introduction-to-mean-shift-algorithm/
+    # no el del paper
     return np.array([0.75*(1-x**2) if np.linalg.norm(x)<=1 else 0 for x in values])

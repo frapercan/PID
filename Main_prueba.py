@@ -47,15 +47,16 @@ RGB2.thumbnail(maxsize, PIL.Image.ANTIALIAS)
 
 RGB2 = np.array(RGB2)
 print(np.shape(RGB2))
-LISTA_PUNTOS =  list([])
-alto = RGB2.shape[0]
-ancho = RGB2.shape[1]
-for i in range(alto):
-     for j in range(ancho):
-         LISTA_PUNTOS.append([i,j,RGB2[i][j][0],RGB2[i][j][1],RGB2[i][j][2]])
-LISTA_PUNTOS = np.array(LISTA_PUNTOS)
-np.shape(LISTA_PUNTOS)
+# LISTA_PUNTOS =  list([])
+# alto = RGB2.shape[0]
+# ancho = RGB2.shape[1]
+# for i in range(alto):
+#      for j in range(ancho):
+#          LISTA_PUNTOS.append([i,j,RGB2[i][j][0],RGB2[i][j][1],RGB2[i][j][2]])
+# LISTA_PUNTOS = np.array(LISTA_PUNTOS)
+# np.shape(LISTA_PUNTOS)
 
+# La lista de puntos ahora son las intersecciones del grid
 LISTA_PUNTOS = grid.puntos_interseccion(RGB2, 5)
 print(LISTA_PUNTOS)
 import mean_shift_epanechnikov as ms
@@ -63,8 +64,11 @@ import mean_shift_epanechnikov as ms
 mean_shifter = ms.MeanShift(kernel = 'epanechnikov_kernel')
 #ORIGINALMENTE ERA [0.2,0.2]
 mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS, kernel_bandwidth = [300,255])
+
+# Muestra las asignaciones de cada uno de los puntos
 cluster_assignments = mean_shift_result.cluster_ids
 print(cluster_assignments)
+
 res = grid.visualizar_clusteres(RGB2,mean_shift_result)
 
 img = Image.fromarray(res,'RGB')

@@ -6,7 +6,6 @@ import point_grouper as pg
 
 #EN EL ARCHIVO ORIGNAL ESTABA COMO: MIN_DISTANCE = 0.000001
 MIN_DISTANCE = 0.001
-MIN_CONVERGENCE = 0.02
 
 class MeanShift(object):
     def __init__(self, kernel=ms_utils.gaussian_kernel):
@@ -27,13 +26,18 @@ class MeanShift(object):
         shift_points = np.array(points)
         max_min_dist = 1
         dist=0
-        dist_after=1
         iteration_number = 0
 
         still_shifting = [True] * points.shape[0]
+        # Cambiado a 100 iteraciones para que pare y no se quede dando vueltas en el etereo infinito.
+        # Con 100 iteraciones suele sobrar para que se clasifiquen casi todos los puntos.
         for _ in range(100):
+
+            # Imprime por pantalla la maxima de las miminas distancias de movimiento de los puntos,
+            # y cuantos quedan por mover.
             print(max_min_dist)
             print("Puntos en movimiento: {}".format(len([x for x in still_shifting if x==True])))
+
             max_min_dist = 0
             iteration_number += 1
             for i in range(0, len(shift_points)):
@@ -41,8 +45,10 @@ class MeanShift(object):
                     continue
                 p_new = shift_points[i]
                 p_new_start = p_new
+                # Para el shifting solo consideramos los puntos dentro del vecindario del punto que estamos moviendo.
                 p_new = self._shift_point(p_new_start, ms_utils.neighbourhood_points(shift_points,p_new_start,distance=40), kernel_bandwidth)
-                dist = 0 if dist==ms_utils.euclidean_dist(p_new, p_new_start) else ms_utils.euclidean_dist(p_new, p_new_start)
+                # Distancia euclidea entre el punto antiguo y el movido
+                dist = ms_utils.euclidean_dist(p_new, p_new_start)
                 if dist > max_min_dist:
                     max_min_dist = dist
                 if dist < MIN_DISTANCE:
