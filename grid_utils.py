@@ -85,17 +85,19 @@ def visualizar_clusteres(imagen_original,mean_shift_result):
     """
     shape = np.shape(imagen_original)
     clases = {}
-    resultado = np.zeros((shape),dtype='uint8')
+    resultado = imagen_original #np.zeros((shape),dtype='uint8')
     resultado.flags.writeable = True
     puntos_originales = list(mean_shift_result.original_points)
 
     #Le metí que genere un color aleatorio por cada cluster para poder ver con claridad los clusteres y que
     # no se confundan con la imagen
     random_color = lambda: random.randint(0,255)
-    
+
     for (i,j) in list(enumerate(mean_shift_result.cluster_ids)):
         if not (j in clases):
             clases.update({j:[random_color(),random_color(),random_color()]})
+            color = clases.get(j)
+            resultado[puntos_originales[i][0],puntos_originales[i][1]]= color
         else:
             color = clases.get(j)
             resultado[puntos_originales[i][0],puntos_originales[i][1]]= color

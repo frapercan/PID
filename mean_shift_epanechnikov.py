@@ -31,7 +31,7 @@ class MeanShift(object):
         still_shifting = [True] * points.shape[0]
         # Cambiado a 100 iteraciones para que pare y no se quede dando vueltas en el etereo infinito.
         # Con 100 iteraciones suele sobrar para que se clasifiquen casi todos los puntos.
-        for _ in range(100):
+        for _ in range(50):
 
             # Imprime por pantalla la maxima de las miminas distancias de movimiento de los puntos,
             # y cuantos quedan por mover.

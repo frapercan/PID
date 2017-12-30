@@ -11,7 +11,7 @@ import numpy as np
 ##Imagen de muestra en el mismo directorio del archivo
 RGB = np.array(io.imread("balloon.jpg"))
 
-RGB2 = PIL.Image.open("jakob-nielsen-thumbs-up.jpg")
+RGB2 = PIL.Image.open("balloon.jpg")
 
 LAB = np.array(color.rgb2lab(RGB))
 
@@ -21,7 +21,7 @@ HSV = np.array(color.rgb2hsv(RGB))
 GAUSSIAN_KERNELS = [1, 3, 5]
 
 #RGB1 = filters.gaussian(RGB,GAUSSIAN_KERNELS[0])
-RGB2 = RGB2.filter(ImageFilter.GaussianBlur(GAUSSIAN_KERNELS[2]))
+RGB2 = RGB2.filter(ImageFilter.GaussianBlur(GAUSSIAN_KERNELS[1]))
 
 
 RGB2.save('blurred.png','png')
@@ -43,7 +43,7 @@ import grid_utils as grid
 #ORIGINALMENTE ERAN 100
 maxsize = (200, 200)
 
-RGB2.thumbnail(maxsize, PIL.Image.ANTIALIAS)
+#RGB2.thumbnail(maxsize, PIL.Image.ANTIALIAS)
 
 RGB2 = np.array(RGB2)
 print(np.shape(RGB2))
@@ -58,16 +58,17 @@ print(np.shape(RGB2))
 
 # La lista de puntos ahora son las intersecciones del grid
 LISTA_PUNTOS = grid.puntos_interseccion(RGB2, 5)
-print(LISTA_PUNTOS)
+print("Numero de puntos: {}".format(len(LISTA_PUNTOS)))
 import mean_shift_epanechnikov as ms
 #Utilizar el algoritmo meanshift sobre la lista de puntos. 5 Dimensiones + 1 de la clasificación
 mean_shifter = ms.MeanShift(kernel = 'epanechnikov_kernel')
 #ORIGINALMENTE ERA [0.2,0.2]
-mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS, kernel_bandwidth = [300,255])
+mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS, kernel_bandwidth = [400,100])
 
 # Muestra las asignaciones de cada uno de los puntos
 cluster_assignments = mean_shift_result.cluster_ids
 print(cluster_assignments)
+print("Puntos asignados: {}".format(len(cluster_assignments)))
 
 res = grid.visualizar_clusteres(RGB2,mean_shift_result)
 
