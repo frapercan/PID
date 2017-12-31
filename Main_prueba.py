@@ -11,11 +11,11 @@ import numpy as np
 ##Imagen de muestra en el mismo directorio del archivo
 RGB = np.array(io.imread("balloon.jpg"))
 
-RGB2 = PIL.Image.open("balloon.jpg")
+RGB2 = PIL.Image.open("jakob-nielsen-thumbs-up.jpg")
 
-LAB = np.array(color.rgb2lab(RGB))
+LAB = np.array(color.rgb2lab(RGB2))
 
-HSV = np.array(color.rgb2hsv(RGB))
+HSV = np.array(color.rgb2hsv(RGB2))
 
 ##Aplicamos los filtros gaussianos y almacenamos en variables
 GAUSSIAN_KERNELS = [1, 3, 5]
@@ -29,11 +29,11 @@ RGB2.save('blurred.png','png')
 #RGB3 = filters.gaussian(RGB,GAUSSIAN_KERNELS[2])
 #
 #LAB1 = filters.gaussian(LAB,GAUSSIAN_KERNELS[0])
-#LAB2 = filters.gaussian(LAB,GAUSSIAN_KERNELS[1])
+LAB2 = filters.gaussian(LAB,GAUSSIAN_KERNELS[1])
 #LAB3 = filters.gaussian(LAB,GAUSSIAN_KERNELS[2])
 #
 #HSV1 = filters.gaussian(HSV,GAUSSIAN_KERNELS[0])
-#HSV2 = filters.gaussian(HSV,GAUSSIAN_KERNELS[1])
+HSV2 = filters.gaussian(HSV,GAUSSIAN_KERNELS[1])
 #HSV3 = filters.gaussian(HSV,GAUSSIAN_KERNELS[2])
 
 import foreground_estimation
@@ -57,17 +57,18 @@ print(np.shape(RGB2))
 # np.shape(LISTA_PUNTOS)
 
 # La lista de puntos ahora son las intersecciones del grid
-LISTA_PUNTOS = grid.puntos_interseccion(RGB2, 5)
+LISTA_PUNTOS = grid.puntos_interseccion(HSV2, 10)
 print("Numero de puntos: {}".format(len(LISTA_PUNTOS)))
 import mean_shift_epanechnikov as ms
 #Utilizar el algoritmo meanshift sobre la lista de puntos. 5 Dimensiones + 1 de la clasificación
 mean_shifter = ms.MeanShift(kernel = 'epanechnikov_kernel')
 #ORIGINALMENTE ERA [0.2,0.2]
-mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS, kernel_bandwidth = [400,100])
+mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS, kernel_bandwidth = [400,10])
 
 # Muestra las asignaciones de cada uno de los puntos
 cluster_assignments = mean_shift_result.cluster_ids
 print(cluster_assignments)
+print(mean_shift_result.original_points)
 print("Puntos asignados: {}".format(len(cluster_assignments)))
 
 res = grid.visualizar_clusteres(RGB2,mean_shift_result)
@@ -77,3 +78,6 @@ img.save('cluster_sea.png','png')
 
 
 x_y_c = foreground_estimation.cambia_formato(mean_shift_result)
+f_estimator =   foreground_estimation.foreground_estimation(x_y_c)
+fe_scores = f_estimator.predictor()
+print(fe_scores)

@@ -14,6 +14,7 @@ Procesamiento de Imagenes Digitales.
 
 import numpy as np
 import random
+from skimage import io, color,filters
 
 
 def gridear_imagen(img, divisiones):
@@ -68,7 +69,7 @@ def extrae_puntos_grid_imagen(img, divisiones):
     return np.array(LISTA_PUNTOS)
 
 
-def visualizar_clusteres(imagen_original,mean_shift_result):
+def visualizar_clusteres(imagen_original,mean_shift_result,formato="RGB"):
     """Devuelve un array con la imagen clusterizada.
 
     Esta imagen tendrá tantos colores como clusteres haya detectado el resultado
@@ -87,7 +88,13 @@ def visualizar_clusteres(imagen_original,mean_shift_result):
     clases = {}
     resultado = imagen_original #np.zeros((shape),dtype='uint8')
     resultado.flags.writeable = True
-    puntos_originales = list(mean_shift_result.original_points)
+
+    if(formato=="LAB"):
+        puntos_originales = list(mean_shift_result.original_points)
+    elif(formato=="HSV"):
+        puntos_originales = color.lab2rgb(list(mean_shift_result.original_points))
+    else:
+        puntos_originales = list(mean_shift_result.original_points)
 
     #Le metí que genere un color aleatorio por cada cluster para poder ver con claridad los clusteres y que
     # no se confundan con la imagen
@@ -96,11 +103,8 @@ def visualizar_clusteres(imagen_original,mean_shift_result):
     for (i,j) in list(enumerate(mean_shift_result.cluster_ids)):
         if not (j in clases):
             clases.update({j:[random_color(),random_color(),random_color()]})
-            color = clases.get(j)
-            resultado[puntos_originales[i][0],puntos_originales[i][1]]= color
-        else:
-            color = clases.get(j)
-            resultado[puntos_originales[i][0],puntos_originales[i][1]]= color
+        color = clases.get(j)
+        resultado[int(puntos_originales[i][0]),int(puntos_originales[i][1])]= color
     return resultado
 
 def generar_imagen_con_grid(array_imagen,tam_celda):

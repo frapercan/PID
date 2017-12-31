@@ -25,30 +25,30 @@ class foreground_estimation(object):
     """
     Clase que clasifica en fondo y figura un conjunto de vectores en base a las dos primeras
     coordenadas x e y, y como último elemento del vector una clasificación.
-    
+
     """
 
     def __init__(self,x_y_c,image=0):
         self.x_y_c = x_y_c
-        self.numero_clusteres = max(x_y_c, key = lambda x: x[-1])[-1]
+        self.numero_clusteres = max(x_y_c, key = lambda x: x[-1])[-1]+1
         self.image = image
         #self.pixels_variation = self.get_pixel_variation()
         #self.overlapping_scores = self.get_overlapping_score()
 
-        
-        
-    
+
+
+
     def predictor(self):
         return np.exp(-(self.get_pixel_variation() + self.get_overlapping_score()))
-        
+
     def get_pixel_variation(self):
-        
+
         cluster_areas = np.zeros(self.numero_clusteres)
         for i in range(self.numero_clusteres):
             cluster_areas[i] = sum([1 for _,_,c in self.x_y_c if c == i])
         #Normalizacion hecho con Normalize. Da valores entre 0 y 1, pero no da valores ni cero ni uno.
         return normalize((1/cluster_areas) * sum([(x-(np.mean(x)*x))*(y-(np.mean(y)*y)) for x,y in self.x_y_c[:,0:2]]))
-    
+
     def get_overlapping_score(self,border_radius = 5):
         border_points = [(x+radius,y+radius) for x,y,_ in self.x_y_c for radius in range(border_radius)]
         border_points_area = sum([1 for _ in border_points])
@@ -65,8 +65,8 @@ def cambia_formato(mean_shift_result):
     clusters = mean_shift_result.cluster_ids
     resultado = np.concatenate((puntos[:,0:2],np.array([clusters]).T),axis=1)
     return resultado
-        
-        
+
+
 
 
 
@@ -77,21 +77,21 @@ def busca_puntos_cluster_i(i,lista_puntos,clasificacion,rango):
     puntos_cluster_i = [lista_puntos[j] for j in indices_i]
     return puntos_cluster_i
 
-"""   
+"""
     def variacion_coordenadas_pixeles(lista_puntos,clasificacion):
         pass
     def coste_solapamiento(lista_puntos,clasificacion,rango):
         pass
-    
+
     vi = variacion_coordenadas_pixeles(lista_puntos,clasificacion)
     bi = coste_solapamiento(lista_puntos,clasificacion,rango)
-    
+
     fei = math.exp(-(vi+bi))
-        
+
 def foreground_estimation(lista_puntos,clasificacion,rango):
     puntos_visitados = []
     maximo = np.amax(clasificacion)
     for i in range(0,maximo):
         foreground_estimation_i(i,lista_puntos,clasificacion,rango)
-uso -> ejecutrar main_prueba y despues foreground_estimation_i(2,mean_shift_result.original_points,mean_shift_result.cluster_ids,3)    
-"""       
+uso -> ejecutrar main_prueba y despues foreground_estimation_i(2,mean_shift_result.original_points,mean_shift_result.cluster_ids,3)
+"""
