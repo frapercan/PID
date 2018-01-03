@@ -15,6 +15,7 @@ Procesamiento de Imagenes Digitales.
 import numpy as np
 import random
 from skimage import io, color,filters
+import itertools as it
 
 
 def gridear_imagen(img, divisiones):
