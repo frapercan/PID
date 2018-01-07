@@ -37,6 +37,7 @@ HSV2 = filters.gaussian(HSV,GAUSSIAN_KERNELS[1])
 #HSV3 = filters.gaussian(HSV,GAUSSIAN_KERNELS[2])
 
 import foreground_estimation
+import bayesian
 
 import grid_utils as grid
 #Extraer los puntos de la imagen que tienen intersección con el Grid
@@ -57,25 +58,38 @@ print(np.shape(RGB2))
 # np.shape(LISTA_PUNTOS)
 
 # La lista de puntos ahora son las intersecciones del grid
-LISTA_PUNTOS = grid.puntos_interseccion(HSV2, 10)
+LISTA_PUNTOS = grid.puntos_interseccion(RGB2, 10)
 print("Numero de puntos: {}".format(len(LISTA_PUNTOS)))
 import mean_shift_epanechnikov as ms
 #Utilizar el algoritmo meanshift sobre la lista de puntos. 5 Dimensiones + 1 de la clasificación
 mean_shifter = ms.MeanShift(kernel = 'epanechnikov_kernel')
 #ORIGINALMENTE ERA [0.2,0.2]
-mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS, kernel_bandwidth = [400,10])
+mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS, kernel_bandwidth = [100,255])
 
 # Muestra las asignaciones de cada uno de los puntos
 cluster_assignments = mean_shift_result.cluster_ids
 print(cluster_assignments)
-print(mean_shift_result.original_points)
-print("Puntos asignados: {}".format(len(cluster_assignments)))
-
+#print(bayesian.get_small_clusters(cluster_assignments,1))
+new_assignments = bayesian.reduce_clusters(mean_shift_result,10)
+print(new_assignments)
+mean_shift_result.cluster_ids=new_assignments
 res = grid.visualizar_clusteres(RGB2,mean_shift_result)
 
 img = Image.fromarray(res,'RGB')
 img.save('cluster_sea.png','png')
 
+bayesian = bayesian.BayesianClassifier(mean_shift_result)
+bayesian.show_classifiers()
+
+LISTA_PUNTOS_BAYESIAN=grid.puntos_interseccion(RGB2, 1) #toda la imagen
+bayesian_clustering = bayesian.cluster_data_points(LISTA_PUNTOS_BAYESIAN)
+print(bayesian_clustering)
+
+bayesian_result = ms.MeanShiftResult(LISTA_PUNTOS_BAYESIAN,np.zeros(1),bayesian_clustering)
+res_b = grid.visualizar_clusteres(RGB2,bayesian_result)
+
+img = Image.fromarray(res_b,'RGB')
+img.save('bayesian.png','png')
 
 x_y_c = foreground_estimation.cambia_formato(mean_shift_result)
 f_estimator =   foreground_estimation.foreground_estimation(x_y_c)

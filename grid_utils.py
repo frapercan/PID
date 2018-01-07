@@ -180,16 +180,16 @@ def generar_puntos_interseccion_grid(tam_x,tam_y,tam_celda):
         #m: valor que se va actualizando que informa si se ha traspasado el tamaño de una celda (en x) en cada iteración
         a = 0
         b = 0
-        m = 1
+        m = 0
         while b < tam_y:
             while a < tam_x:
-                if(m == 0):
+                if(m <= 1):
                     yield (b,a)
                     m = tam_celda
                 else:
                     m-=1
                 a+=1
-            b+=tam_celda+1
-            m=1
+            b+=tam_celda
+            m=0
             a=0
     return list(iterador_grid())
