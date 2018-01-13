@@ -16,7 +16,7 @@ class MeanShift(object):
             kernel = ms_utils.epanechnikov_kernel
         self.kernel = kernel
 
-    def cluster(self, points, kernel_bandwidth, iteration_callback=None):
+    def cluster(self, points,distance, kernel_bandwidth,iteration_callback=None):
 
         """Recibe una lista de puntos, el tamaño de la distancia a tener en cuenta al utilizar el Kernel,
            y un parametro para sacar los estados a mitad del algoritmo(Debug).
@@ -46,7 +46,7 @@ class MeanShift(object):
                 p_new = shift_points[i]
                 p_new_start = p_new
                 # Para el shifting solo consideramos los puntos dentro del vecindario del punto que estamos moviendo.
-                p_new = self._shift_point(p_new_start, ms_utils.neighbourhood_points(shift_points,p_new_start,distance=50), kernel_bandwidth)
+                p_new = self._shift_point(p_new_start, ms_utils.neighbourhood_points(shift_points,p_new_start,distance), kernel_bandwidth)
                 # Distancia euclidea entre el punto antiguo y el movido
                 dist = ms_utils.euclidean_dist(p_new, p_new_start)
                 if dist > max_min_dist:
