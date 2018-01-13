@@ -12,11 +12,21 @@ Procesamiento de Imagenes Digitales.
 
 """
 
+import PIL
+from PIL import Image, ImageFilter
 import numpy as np
 import random
 from skimage import io, color,filters
 import itertools as it
 
+
+
+def thumbnail(nombre_imagen,maximo_tamaño):
+    imagen = Image.open(nombre_imagen)
+    imagen.thumbnail( maximo_tamaño, Image.ANTIALIAS)
+    nuevo_nombre = nombre_imagen[:-4] + "_thumbnail" + nombre_imagen[-4:]
+    imagen.save(nuevo_nombre)
+    return nuevo_nombre
 
 def gridear_imagen(img, divisiones):
     """Aplica un filtro sobre una imagen en forma de malla.

@@ -17,7 +17,7 @@ bi(ci,Br) = (h^d_ci pertence a Br)/(h^d_Br), i pertenece a {i,..,k}
 
 import math
 from sklearn.preprocessing import normalize
-
+from scipy.cluster.vq import kmeans,vq,whiten
 import numpy as np
 
 
@@ -36,7 +36,15 @@ class foreground_estimation(object):
         #self.overlapping_scores = self.get_overlapping_score()
 
 
-
+    def classify_points(self):
+        fe_scores = self.predictor()
+        normalizacion = whiten(fe_scores)
+        normalizacion = normalizacion.reshape(-1,1)
+        
+        centroides,_ = kmeans(normalizacion,k_or_guess=2)
+        clases,_ = vq(fe_scores.reshape(-1,1),centroides)
+        lista = [[x,y,clases[c]] for x,y,c in self.x_y_c]
+        return lista
 
     def predictor(self):
         return np.exp(-(self.get_pixel_variation() + self.get_overlapping_score()))
@@ -59,7 +67,8 @@ class foreground_estimation(object):
             overlapping_points_area[i] = sum([1 for _ in overlapping_points[i]])
         return overlapping_points_area/border_points_area
 
-
+          
+        
 def cambia_formato(mean_shift_result):
     puntos = mean_shift_result.original_points
     clusters = mean_shift_result.cluster_ids

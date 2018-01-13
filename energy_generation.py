@@ -3,6 +3,7 @@
 Created on Sun Dec 31 03:28:10 2017
 
 """
+import pylab
 from PIL import Image, ImageFilter
 import grid_utils
 import itertools as it
@@ -31,18 +32,41 @@ class energy_generation(object):
         self.morfologia()
         img = Image.fromarray(self.res,'L')
         img.save('morfologia1.png','png')
+        
+
+        """
+        Euclidean distance transform, sacado de http://www.logarithmic.net/pfh/blog/01185880752
         """
         
-        Aplicar una transformacion de distancia a la imagen con morfologia.
-        Por ahora solo hace la intereseccion y la morfologia y salva una imagen
         
-        (operaciones...)
+        def escaneado(f):
+            for i, fi in enumerate(f):
+                if (fi != np.inf):
+                    for j in range(1,i+1):
+                        x = fi+j*j
+                        if f[i-j] >= x:
+                            f[i-j] = x
         
+        def transformacion_distancia(array_binario):
+            f = np.where(array_binario, np.inf, 0.0)
+            print(f)
+            pylab.imshow(f)
+            pylab.show()
+            pylab.clf()
+            for i in range(f.shape[0]):
+                escaneado(f[i,:])
+                escaneado(f[i,::-1])
+            for i in range(f.shape[1]):
+                escaneado(f[:,i])
+                escaneado(f[::-1,i])
+            np.sqrt(f,f)
+            return f
+        print(transformacion_distancia(self.res))
+        pylab.imshow(transformacion_distancia(self.res))
+        pylab.show()
+        #pylab.savefig()
+                
         
-        
-        
-        return 
-        """
         
     
     def interseccion_grid_figura(self):
