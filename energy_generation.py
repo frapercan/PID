@@ -8,7 +8,7 @@ from PIL import Image, ImageFilter
 import grid_utils
 import itertools as it
 import numpy as np
-
+import matplotlib.pyplot as plt
 class energy_generation(object):
     """
     Clase que coge un foreground estimation en donde se diferencia fondo y figura (tras k-means con k=2)
@@ -19,10 +19,11 @@ class energy_generation(object):
         tam_celda: Tamaño de la celda del mismo grid usado para el meanshift.
     """
     
-    def __init__(self,x_y_c,shape,tam_celda):
+    def __init__(self,x_y_c,shape,tam_celda,nombre):
         self.x_y_c = x_y_c
         self.shape = shape
         self.tam_celda = tam_celda
+        self.nombre = nombre
     
     def hacer_saliency_map(self):
         
@@ -62,9 +63,14 @@ class energy_generation(object):
             np.sqrt(f,f)
             return f
         print(transformacion_distancia(self.res))
-        pylab.imshow(transformacion_distancia(self.res))
-        pylab.show()
-        #pylab.savefig()
+        data = transformacion_distancia(self.res)
+        cmap = plt.cm.jet
+        norm = plt.Normalize(vmin=data.min(), vmax=data.max())
+        image = cmap(norm(data))
+        plt.imsave(self.nombre, image)
+#        imshow()
+#        pylab.show()
+#        pylab.savefig()
                 
         
         

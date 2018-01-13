@@ -49,8 +49,8 @@ import grid_utils as grid
 
 #thumbnail = grid.thumbnail("balloon.jpg",(200,200))
 
-RGB = np.array(io.imread("balloon.jpg"))
 
+RGB = np.array(io.imread("balloon.jpg"))
 
 
 LISTA_PUNTOS = grid.puntos_interseccion(RGB, 5)
@@ -60,7 +60,7 @@ import mean_shift_epanechnikov as ms
 #Utilizar el algoritmo meanshift sobre la lista de puntos. 5 Dimensiones + 1 de la clasificación
 mean_shifter = ms.MeanShift(kernel = 'epanechnikov_kernel')
 #ORIGINALMENTE ERA [0.2,0.2]
-mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS, kernel_bandwidth = [400,10])
+mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS,50, kernel_bandwidth = [400,10])
 
 # Muestra las asignaciones de cada uno de los puntos
 cluster_assignments = mean_shift_result.cluster_ids
@@ -68,7 +68,7 @@ print(cluster_assignments)
 print(mean_shift_result.original_points)
 print("Puntos asignados: {}".format(len(cluster_assignments)))
 
-res = grid.visualizar_clusteres(RGB,mean_shift_result)
+(res,colores) = grid.visualizar_clusteres(RGB,mean_shift_result)
 
 img = Image.fromarray(res,'RGB')
 img.save('cluster_balloon.png','png')
@@ -111,7 +111,9 @@ puntos_clasificados = fe_estimator.classify_points()
 #cambia_clase_n_primeros(x_y_c,20)
 #cambia_clase(x_y_c)
 #print(x_y_c)
-eg = energy_generation.energy_generation(puntos_clasificados,np.shape(RGB),10)
+
+
+eg = energy_generation.energy_generation(puntos_clasificados,np.shape(RGB),10,"transformacion_distancia2.jpg")
 eg.hacer_saliency_map()
 
 
