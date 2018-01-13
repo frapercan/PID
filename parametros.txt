@@ -1,0 +1,6 @@
+Parametros conocidos para imagenes de prueba:
+
+-Globo: Grid:5/10, cluster distance=50, bandwidth=[100,255]
+
+
+-Angel: Reescalado, grid 10, distance 80, bw=[100,255]
