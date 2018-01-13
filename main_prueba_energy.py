@@ -45,14 +45,22 @@ from scipy.cluster.vq import kmeans,vq,whiten
 import grid_utils as grid
 #Extraer los puntos de la imagen que tienen intersección con el Grid
 #ORIGINALMENTE ERAN 100
-
+GAUSSIAN_KERNELS = [1, 3, 5]
 
 #thumbnail = grid.thumbnail("balloon.jpg",(200,200))
 
 
-RGB = np.array(io.imread("jakob-nielsen-thumbs-up.jpg"))
+#RGB = np.array(io.imread("jakob-nielsen-thumbs-up.jpg"))
+
+RGB2 = PIL.Image.open("angel_fran.jpg")
+#RGB2 = RGB2.filter(ImageFilter.GaussianBlur(GAUSSIAN_KERNELS[1]))
+
+RGB2.save('blurred.png','png')
 
 
+grid.thumbnail("blurred.png",(200,200))
+
+RGB = np.array(io.imread("blurred_thumbnail.png"))
 LISTA_PUNTOS = grid.puntos_interseccion(RGB, 10)
 print(np.shape(RGB))
 print("Numero de puntos: {}".format(len(LISTA_PUNTOS)))
@@ -60,7 +68,7 @@ import mean_shift_epanechnikov as ms
 #Utilizar el algoritmo meanshift sobre la lista de puntos. 5 Dimensiones + 1 de la clasificación
 mean_shifter = ms.MeanShift(kernel = 'epanechnikov_kernel')
 #ORIGINALMENTE ERA [0.2,0.2]
-mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS,50, kernel_bandwidth = [400,10])
+mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS,80, kernel_bandwidth = [100,255])
 
 # Muestra las asignaciones de cada uno de los puntos
 cluster_assignments = mean_shift_result.cluster_ids
@@ -94,7 +102,7 @@ print(fe_estimator.predictor())
 #lista = [[x,y,clases[c]] for x,y,c in x_y_c]
 #print(np.shape(lista))
 #print(np.shape(fe_estimator.classify_points()))
-'''
+
 puntos_clasificados = fe_estimator.classify_points()
 #print(fe_scores[clases==0])
 #print(fe_scores[clases==1])
@@ -161,4 +169,3 @@ norm = plt.Normalize(vmin=data.min(), vmax=data.max())
 image = cmap(norm(data))
 plt.imsave("superpixel_p.jpg", image)
 
-'''

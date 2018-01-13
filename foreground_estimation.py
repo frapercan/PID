@@ -55,9 +55,9 @@ class foreground_estimation(object):
         for i in range(self.numero_clusteres):
             cluster_areas[i] = sum([1 for _,_,c in self.x_y_c if c == i])
             
-        cluster_areas = cluster_areas.reshape(-1,1)
+        cluster_areas = cluster_areas.reshape(1,-1)
         #Normalizacion hecho con Normalize. Da valores entre 0 y 1, pero no da valores ni cero ni uno.
-        return normalize((1/cluster_areas) * sum([(x-(np.mean(x)*x))*(y-(np.mean(y)*y)) for x,y in self.x_y_c[:,0:2]]))[0]
+        return normalize((1/cluster_areas) * sum([(x-(np.mean(x)*x))*(y-(np.mean(y)*y)) for x,y in self.x_y_c[:,0:2]]))
 
     def get_overlapping_score(self,border_radius = 5):
         border_points = [(x+radius,y+radius) for x,y,_ in self.x_y_c for radius in range(border_radius)]
