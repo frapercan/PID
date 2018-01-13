@@ -70,7 +70,7 @@ def extrae_puntos_grid_imagen(img, divisiones):
     return np.array(LISTA_PUNTOS)
 
 
-def visualizar_clusteres(imagen_original,mean_shift_result,formato="RGB"):
+def visualizar_clusteres(imagen_original,mean_shift_result,formato="RGB",preclustering=False):
     """Devuelve un array con la imagen clusterizada.
 
     Esta imagen tendrá tantos colores como clusteres haya detectado el resultado
@@ -87,8 +87,8 @@ def visualizar_clusteres(imagen_original,mean_shift_result,formato="RGB"):
     """
     shape = np.shape(imagen_original)
     clases = {}
-    resultado = imagen_original #np.zeros((shape),dtype='uint8')
-    resultado.flags.writeable = True
+
+
 
     if(formato=="LAB"):
         puntos_originales = list(mean_shift_result.original_points)
@@ -99,14 +99,24 @@ def visualizar_clusteres(imagen_original,mean_shift_result,formato="RGB"):
 
     #Le metí que genere un color aleatorio por cada cluster para poder ver con claridad los clusteres y que
     # no se confundan con la imagen
-    random_color = lambda: random.randint(0,255)
+    random_color = lambda: [random.randint(0,255) for _ in range(3)]
 
-    for (i,j) in list(enumerate(mean_shift_result.cluster_ids)):
-        if not (j in clases):
-            clases.update({j:[random_color(),random_color(),random_color()]})
-        color = clases.get(j)
-        resultado[int(puntos_originales[i][0]),int(puntos_originales[i][1])]= color
-    return resultado
+    if not preclustering:
+        resultado = imagen_original #np.zeros((shape),dtype='uint8')
+        resultado.flags.writeable = True
+        for (i,j) in list(enumerate(mean_shift_result.cluster_ids)):
+            if not (j in clases):
+                clases.update({j:random_color()})
+            color = clases.get(j)
+            resultado[int(puntos_originales[i][0]),int(puntos_originales[i][1])]= color
+        return (resultado,list(clases.values()))
+    else:
+        resultado = np.zeros((shape),dtype='uint8')
+        resultado.flags.writeable = True    
+        for (i,j) in list(enumerate(mean_shift_result.cluster_ids)):
+            color = preclustering[j]
+            resultado[int(puntos_originales[i][0]),int(puntos_originales[i][1])]= color
+        return resultado
 
 def generar_imagen_con_grid(array_imagen,tam_celda):
     shape = np.shape(array_imagen)
