@@ -62,7 +62,6 @@ class energy_generation(object):
                 escaneado(f[::-1,i])
             np.sqrt(f,f)
             return f
-        print(transformacion_distancia(self.res))
         data = transformacion_distancia(self.res)
         cmap = plt.cm.jet
         norm = plt.Normalize(vmin=data.min(), vmax=data.max())
@@ -71,7 +70,7 @@ class energy_generation(object):
 #        imshow()
 #        pylab.show()
 #        pylab.savefig()
-                
+        return data
         
         
     

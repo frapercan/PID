@@ -50,10 +50,10 @@ import grid_utils as grid
 #thumbnail = grid.thumbnail("balloon.jpg",(200,200))
 
 
-RGB = np.array(io.imread("balloon.jpg"))
+RGB = np.array(io.imread("jakob-nielsen-thumbs-up.jpg"))
 
 
-LISTA_PUNTOS = grid.puntos_interseccion(RGB, 5)
+LISTA_PUNTOS = grid.puntos_interseccion(RGB, 10)
 print(np.shape(RGB))
 print("Numero de puntos: {}".format(len(LISTA_PUNTOS)))
 import mean_shift_epanechnikov as ms
@@ -77,6 +77,7 @@ img.save('cluster_balloon.png','png')
 x_y_c = foreground_estimation.cambia_formato(mean_shift_result)
 print(x_y_c)
 fe_estimator = foreground_estimation.foreground_estimation(x_y_c)
+print(fe_estimator.predictor())
 #puntos_clasificados = fe_estimator.classify_points()
 
 #fe_scores = fe_estimator.predictor()
@@ -93,7 +94,7 @@ fe_estimator = foreground_estimation.foreground_estimation(x_y_c)
 #lista = [[x,y,clases[c]] for x,y,c in x_y_c]
 #print(np.shape(lista))
 #print(np.shape(fe_estimator.classify_points()))
-
+'''
 puntos_clasificados = fe_estimator.classify_points()
 #print(fe_scores[clases==0])
 #print(fe_scores[clases==1])
@@ -113,8 +114,51 @@ puntos_clasificados = fe_estimator.classify_points()
 #print(x_y_c)
 
 
+from skimage.segmentation import slic
+from skimage.segmentation import mark_boundaries
+from skimage.util import img_as_float
+from skimage import io
+import matplotlib.pyplot as plt
+np.set_printoptions(threshold=1000)
+
 eg = energy_generation.energy_generation(puntos_clasificados,np.shape(RGB),10,"transformacion_distancia2.jpg")
-eg.hacer_saliency_map()
+
+image = img_as_float(io.imread("jakob-nielsen-thumbs-up.jpg"))
+profundidad = eg.hacer_saliency_map()
+print("---------------------------------")
+print(profundidad)
+print("---------------------------------")
+segmentos = slic(image, n_segments = 8, sigma = 10)
+
+segmentos2 = np.ndarray.flatten(segmentos)
+profundidad = np.ndarray.flatten(profundidad)
+print(segmentos)
+
+diccionario = {}
 
 
 
+for s,p in zip(segmentos2,profundidad): 
+    if(not(s in diccionario)):
+        print(p)
+        diccionario[s] = p
+    else:
+        if(p > diccionario[s]):
+            diccionario[s]=p
+data = diccionario
+
+superpixel = list()
+
+for s in segmentos:
+    subl = list()
+    for s1 in s:
+        subl.append(diccionario[s1])
+    superpixel.append(subl)
+data = np.asarray(superpixel)
+
+cmap = plt.cm.Greys
+norm = plt.Normalize(vmin=data.min(), vmax=data.max())
+image = cmap(norm(data))
+plt.imsave("superpixel_p.jpg", image)
+
+'''
