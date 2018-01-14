@@ -52,6 +52,7 @@
       <div class="container" style="margin-top:70px">
         <h3>Pantalla de ejecución</h3>
         <span class="text-secondary">Paso {{paso}} de 9</span>
+
         <div class="progress">
           <div class="progress-bar" role="progressbar" aria-valuenow="{{paso}}" style="width: {{progress_percent}}%" aria-valuemin="0" aria-valuemax="8"></div>
         </div>
@@ -60,8 +61,17 @@
         <img src="{{ image_url }}" width="75%">
       </div> <!-- /container -->
       <hr/>
-      <button class="btn btn-primary">Siguiente paso => </button>
-
+      <div class="row">
+        <div class="col-md-4 offset-md-10">
+          <form action="./run">
+            <input type="hidden" value="{{grid_size}}" id="gridSize" class="form-control" name="gridSize"/>
+            <input type="hidden" value="{{image_pk}}" name="imagePk"/>
+            <input type="hidden" value="{{ paso_next }}" name="paso"/>
+            <input type="hidden" value="{{ test_pk }}" name="test_pk"/>
+            <button class="btn btn-primary btn-lg">Siguiente paso => </button>
+          </form>
+        </div>
+      </div>
     </main>
 <hr/>
     <footer class="container">

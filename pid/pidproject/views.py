@@ -6,8 +6,8 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
-PASOS_ALGORITMO={1:grid_over_image}
-TITULOS_PASOS={1:"Superposición del grid sobre la imagen"}
+PASOS_ALGORITMO={1:grid_over_image,2:meanshift,3:foreground_estimation}
+TITULOS_PASOS={1:"Superposición del grid sobre la imagen",2:"Algoritmo MeanShift",3:"Foreground estimation"}
 
 def index(request):
     imagenes = Imagen.objects.filter(editada=False)[:3]
@@ -42,13 +42,20 @@ def upload(request):
 def run(request):
     image_pk = request.GET['imagePk']
     image_selected = Imagen.objects.get(pk=image_pk)
-    new_test = Prueba(original=image_selected,resultado=image_selected)
-    new_test.save()
+    if('test_pk' not in request.GET):
+        test = Prueba(original=image_selected,resultado=image_selected)
+        test.save()
+    else:
+        test = Prueba.objects.get(pk=request.GET['test_pk'])
     context = {
-        'image_url':PASOS_ALGORITMO[int(request.GET['paso'])](image_pk,new_test.pk,request.GET['gridSize']),
+        'image_url':PASOS_ALGORITMO[int(request.GET['paso'])](image_pk,test.pk,request.GET['gridSize']),
         'image':image_selected,
+        'image_pk':request.GET['imagePk'],
+        'test_pk':test.pk,
         'paso':int(request.GET['paso']),
+        'paso_next':int(request.GET['paso'])+1,
         'progress_percent':(int(request.GET['paso'])/9)*100,
-        'titulo':TITULOS_PASOS[int(request.GET['paso'])]
+        'titulo':TITULOS_PASOS[int(request.GET['paso'])],
+        'grid_size':request.GET['gridSize']
     }
     return render(request,'pidproject/run.html',context)
