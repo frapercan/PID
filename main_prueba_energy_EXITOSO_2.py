@@ -133,7 +133,7 @@ eg = energy_generation.energy_generation(puntos_clasificados,np.shape(RGB),10,"t
 
 profundidad = eg.hacer_saliency_map()
 
-s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_45.jpg")
+s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_a.jpg")
 s.hacer_superpixel()
 
 """

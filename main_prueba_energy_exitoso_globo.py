@@ -48,26 +48,24 @@ import grid_utils as grid
 GAUSSIAN_KERNELS = [1, 3, 5]
 
 
-
+nombre_imagen = "balloon.jpg"
 
 #RGB = np.array(io.imread("jakob-nielsen-thumbs-up.jpg"))
 
 #RGB2 = PIL.Image.open("angel.jpg")
 #RGB2 = RGB2.filter(ImageFilter.GaussianBlur(GAUSSIAN_KERNELS[1]))
 
-nombre_imagen = "santi.jpg"
-
 thumbnail = grid.thumbnail(nombre_imagen,(200,200))
 
 RGB = np.array(io.imread(thumbnail))
-LISTA_PUNTOS = grid.puntos_interseccion(RGB, 19)
+LISTA_PUNTOS = grid.puntos_interseccion(RGB, 10)
 print(np.shape(RGB))
 print("Numero de puntos: {}".format(len(LISTA_PUNTOS)))
 import mean_shift_epanechnikov as ms
 #Utilizar el algoritmo meanshift sobre la lista de puntos. 5 Dimensiones + 1 de la clasificación
 mean_shifter = ms.MeanShift(kernel = 'epanechnikov_kernel')
 #ORIGINALMENTE ERA [0.2,0.2]
-mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS,40, kernel_bandwidth = [100,128])
+mean_shift_result = mean_shifter.cluster(LISTA_PUNTOS,40, kernel_bandwidth = [400,10])
 
 # Muestra las asignaciones de cada uno de los puntos
 cluster_assignments = mean_shift_result.cluster_ids
@@ -130,20 +128,23 @@ np.set_printoptions(threshold=1000)
 
 eg = energy_generation.energy_generation(puntos_clasificados,np.shape(RGB),10,"transformacion_distancia2.jpg")
 
+
 profundidad = eg.hacer_saliency_map()
 
-s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_s.jpg")
+s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_globo.jpg")
 s.hacer_superpixel()
 
 """
+
+
 image = img_as_float(io.imread(thumbnail))
-print("a")
 profundidad = eg.hacer_saliency_map()
 segmentos = slic(image, n_segments = 200, sigma = 5)
-print("b")
 
 segmentos2 = np.ndarray.flatten(segmentos)
 profundidad = np.ndarray.flatten(profundidad)
+
+
 
 diccionario = {}
 
@@ -171,6 +172,6 @@ data = np.asarray(superpixel)
 cmap = plt.cm.Greys
 norm = plt.Normalize(vmin=data.min(), vmax=data.max())
 image = cmap(norm(data))
-plt.imsave("superpixel_p.jpg", image)
+plt.imsave("superpixel_a.jpg", image)
 #
 """
