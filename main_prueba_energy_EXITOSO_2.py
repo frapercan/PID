@@ -79,7 +79,7 @@ print("Puntos asignados: {}".format(len(cluster_assignments)))
 (res,colores) = grid.visualizar_clusteres(RGB,mean_shift_result)
 
 img = Image.fromarray(res,'RGB')
-img.save('cluster_balloon.png','png')
+img.save('visalizacion_puntos_aislados_clusteres.png','png')
 
 
 x_y_c = foreground_estimation.cambia_formato(mean_shift_result)
@@ -129,7 +129,7 @@ from skimage import io
 import matplotlib.pyplot as plt
 np.set_printoptions(threshold=1000)
 
-eg = energy_generation.energy_generation(puntos_clasificados,np.shape(RGB),10,"transformacion_distancia2.jpg")
+eg = energy_generation.energy_generation(puntos_clasificados,np.shape(RGB),10,nombre_salida="transformacion_distancia.png",nombre_grid_interseccion_figura="grid_interseccion_figura.png",nombre_morfologia="morfologia.png")
 
 profundidad = eg.hacer_saliency_map()
 

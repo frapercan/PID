@@ -79,7 +79,7 @@ print("Puntos asignados: {}".format(len(cluster_assignments)))
 (res,colores) = grid.visualizar_clusteres(RGB,mean_shift_result)
 
 img = Image.fromarray(res,'RGB')
-img.save('visalizacion_clusteres.png','png')
+img.save('visalizacion_puntos_aislados_clusteres.png','png')
 
 
 x_y_c = foreground_estimation.cambia_formato(mean_shift_result)
