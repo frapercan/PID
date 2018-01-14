@@ -48,7 +48,7 @@ import grid_utils as grid
 GAUSSIAN_KERNELS = [1, 3, 5]
 
 
-nombre_imagen = "angel.jpg"
+nombre_imagen = "krapfen.jpg"
 
 #RGB = np.array(io.imread("jakob-nielsen-thumbs-up.jpg"))
 
@@ -131,7 +131,7 @@ eg = energy_generation.energy_generation(puntos_clasificados,np.shape(RGB),10,"t
 
 profundidad = eg.hacer_saliency_map()
 
-s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_prueba.jpg")
+s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_k.jpg")
 s.hacer_superpixel()
 
 """

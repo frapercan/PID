@@ -23,62 +23,31 @@ class energy_generation(object):
         tam_celda: Tamaño de la celda del mismo grid usado para el meanshift.
     """
     
-    def __init__(self,x_y_c,shape,tam_celda,nombre):
+    def __init__(self,x_y_c,shape,tam_celda,nombre_salida,nombre_grid_interseccion_figura,nombre_morfologia):
         self.x_y_c = x_y_c
         self.shape = shape
         self.tam_celda = tam_celda
-        self.nombre = nombre
+        self.nombre_salida = nombre_salida
+        self.nombre_grid_interseccion_figura = nombre_grid_interseccion_figura
+        self.nombre_morfologia = nombre_morfologia
     
     def hacer_saliency_map(self):
         
         self.interseccion_grid_figura()
         img = Image.fromarray(self.res,'L')
-        img.save('morfologia.png','png')
+        img.save(self.nombre_grid_interseccion_figura,'png')
         self.morfologia()
         img = Image.fromarray(self.res,'L')
         #img = PIL.ImageOps.invert(img)
-        img.save('morfologia1.png','png')
+        img.save(self.nombre_morfologia,'png')
         
-        self.res = np.array(io.imread("morfologia1.png"))
-        """
-        Euclidean distance transform, sacado de http://www.logarithmic.net/pfh/blog/01185880752
-        """
-        
-        
-#        def escaneado(f):
-#            for i, fi in enumerate(f):
-#                if (fi != np.inf):
-#                    for j in range(1,i+1):
-#                        x = fi+j*j
-#                        if f[i-j] >= x:
-#                            f[i-j] = x
-#        
-#        def transformacion_distancia(array_binario):
-#            f = np.where(array_binario, np.inf, 0.0)
-#            print(f)
-#            pylab.imshow(f)
-#            pylab.show()
-#            pylab.clf()
-#            for i in range(f.shape[0]):
-#                escaneado(f[i,:])
-#                escaneado(f[i,::-1])
-#            for i in range(f.shape[1]):
-#                escaneado(f[:,i])
-#                escaneado(f[::-1,i])
-#            np.sqrt(f,f)
-#            return f
-#        print("a")
-        data = ndimage.distance_transform_edt(self.res)
-#        print(data)
-#        print("b")
+        self.res = np.array(io.imread(self.nombre_morfologia))
 
+        data = ndimage.distance_transform_edt(self.res)
         cmap = plt.cm.jet_r
         norm = plt.Normalize(vmin=data.min(), vmax=data.max())
         image = cmap(norm(data))
-        plt.imsave(self.nombre, image)
-#        imshow()
-#        pylab.show()
-#        pylab.savefig()
+        plt.imsave(self.nombre_salida, image)
         return data
         
         
