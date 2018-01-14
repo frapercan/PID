@@ -98,13 +98,19 @@ def meanshift(image_pk,test_pk,grid_size):
     image_edited.save()
     test = Prueba.objects.get(pk=test_pk)
     original_points_file = open('op.npy','rb')
-    test.op_file = ContentFile(original_points_file.read())
+    cf_op = ContentFile(original_points_file.read())
+    cf_op.name="op.npy"
+    test.op_file = cf_op
     original_points_file.close()
     shifted_points_file = open('sp.npy','rb')
-    test.sp_file = ContentFile(shifted_points_file.read())
+    cf_sp = ContentFile(shifted_points_file.read())
+    cf_sp.name = "sp.npy"
+    test.sp_file = cf_sp
     shifted_points_file.close()
     cluster_assignments_file = open('ca.npy','rb')
-    test.ca_file = ContentFile(cluster_assignments_file.read())
+    cf_ca = ContentFile(cluster_assignments_file.read())
+    cf_ca.name = "ca.npy"
+    test.ca_file = cf_ca
     cluster_assignments_file.close()
     test.resultado=image_edited
     print(test.op_file)
@@ -122,8 +128,8 @@ def foreground_estimation(image_pk,test_pk,grid_size):
     mean_shift_result = ms.MeanShiftResult(op,sp,ca)
     x_y_c = fe.cambia_formato(mean_shift_result)
     foreground_estimator = fe.foreground_estimation(x_y_c)
-    classified = fe.classify_points()
-    morf = eg.energy_generation(classified,np.shape(np.array(image_for_pil)),grid_size,nombre_salida="transformacion_distancia.png",nombre_grid_interseccion_figura="grid_interseccion_figura.png",nombre_morfologia="morfologia.png")
+    classified = foreground_estimator.classify_points()
+    morf = eg.energy_generation(classified,np.shape(np.array(image_for_pil)),int(grid_size),nombre_salida="transformacion_distancia.png",nombre_grid_interseccion_figura="grid_interseccion_figura.png",nombre_morfologia="morfologia.png")
     morf.interseccion_grid_figura()
     morf.morfologia()
     morf_img = Image.fromarray(morf.res,'L')
