@@ -4,11 +4,15 @@ Created on Sun Dec 31 03:28:10 2017
 
 """
 import pylab
+import PIL
 from PIL import Image, ImageFilter
 import grid_utils
 import itertools as it
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy import ndimage
+from skimage import io, color,filters
+plt.interactive(True)
 class energy_generation(object):
     """
     Clase que coge un foreground estimation en donde se diferencia fondo y figura (tras k-means con k=2)
@@ -32,37 +36,42 @@ class energy_generation(object):
         img.save('morfologia.png','png')
         self.morfologia()
         img = Image.fromarray(self.res,'L')
+        #img = PIL.ImageOps.invert(img)
         img.save('morfologia1.png','png')
         
-
+        self.res = np.array(io.imread("morfologia1.png"))
         """
         Euclidean distance transform, sacado de http://www.logarithmic.net/pfh/blog/01185880752
         """
         
         
-        def escaneado(f):
-            for i, fi in enumerate(f):
-                if (fi != np.inf):
-                    for j in range(1,i+1):
-                        x = fi+j*j
-                        if f[i-j] >= x:
-                            f[i-j] = x
-        
-        def transformacion_distancia(array_binario):
-            f = np.where(array_binario, np.inf, 0.0)
-            print(f)
-            pylab.imshow(f)
-            pylab.show()
-            pylab.clf()
-            for i in range(f.shape[0]):
-                escaneado(f[i,:])
-                escaneado(f[i,::-1])
-            for i in range(f.shape[1]):
-                escaneado(f[:,i])
-                escaneado(f[::-1,i])
-            np.sqrt(f,f)
-            return f
-        data = transformacion_distancia(self.res)
+#        def escaneado(f):
+#            for i, fi in enumerate(f):
+#                if (fi != np.inf):
+#                    for j in range(1,i+1):
+#                        x = fi+j*j
+#                        if f[i-j] >= x:
+#                            f[i-j] = x
+#        
+#        def transformacion_distancia(array_binario):
+#            f = np.where(array_binario, np.inf, 0.0)
+#            print(f)
+#            pylab.imshow(f)
+#            pylab.show()
+#            pylab.clf()
+#            for i in range(f.shape[0]):
+#                escaneado(f[i,:])
+#                escaneado(f[i,::-1])
+#            for i in range(f.shape[1]):
+#                escaneado(f[:,i])
+#                escaneado(f[::-1,i])
+#            np.sqrt(f,f)
+#            return f
+#        print("a")
+        data = ndimage.distance_transform_edt(self.res)
+#        print(data)
+#        print("b")
+
         cmap = plt.cm.jet
         norm = plt.Normalize(vmin=data.min(), vmax=data.max())
         image = cmap(norm(data))
@@ -85,25 +94,13 @@ class energy_generation(object):
         
         """
         
-        
-        res = np.asarray(list(it.repeat(list(it.repeat(0,self.shape[1])),self.shape[0])),dtype='uint8')
+        #invertir a 0 para invertir
+        res = np.asarray(list(it.repeat(list(it.repeat(255,self.shape[1])),self.shape[0])),dtype='uint8')
         lista_fondos = []
         for (x,y,c) in self.x_y_c:
             if (c == 1):
-                res[x,y] = 255
+                res[x,y] = 0
                 for i in range(self.tam_celda):
-                    if(x+(i+1) < self.shape[0]):
-                        res[x+(i+1),y] = 255
-                    if(y+(i+1) < self.shape[1]):    
-                        res[x,y+(i+1)] = 255
-                    if(x-(i+1) >= 0):
-                        res[x-(i+1),y] = 255
-                    if(y-(i+1) >= 0):
-                        res[x,y-(i+1)] = 255
-            else:
-                lista_fondos.append((x,y))
-        for (x,y) in lista_fondos:
-            for i in range(self.tam_celda):
                     if(x+(i+1) < self.shape[0]):
                         res[x+(i+1),y] = 0
                     if(y+(i+1) < self.shape[1]):    
@@ -112,6 +109,18 @@ class energy_generation(object):
                         res[x-(i+1),y] = 0
                     if(y-(i+1) >= 0):
                         res[x,y-(i+1)] = 0
+            else:
+                lista_fondos.append((x,y))
+        for (x,y) in lista_fondos:
+            for i in range(self.tam_celda):
+                    if(x+(i+1) < self.shape[0]):
+                        res[x+(i+1),y] = 255
+                    if(y+(i+1) < self.shape[1]):    
+                        res[x,y+(i+1)] = 255
+                    if(x-(i+1) >= 0):
+                        res[x-(i+1),y] = 255
+                    if(y-(i+1) >= 0):
+                        res[x,y-(i+1)] = 255
         self.res = res
         
     def morfologia(self):
@@ -130,7 +139,7 @@ class energy_generation(object):
         for x in range(self.shape[0]):
             lista_puntos = []
             for y in range(self.shape[1]):
-                if(res[x,y] == 255):
+                if(res[x,y] == 0):
                     lista_puntos.append(y)
             if(lista_puntos != []):
                 lista_elem_y_sig = list(zip(lista_puntos,lista_puntos[1:]+lista_puntos[:1]))[:-1]
@@ -138,13 +147,12 @@ class energy_generation(object):
                 if(lista_elem_y_sig[0][0] <= self.tam_celda+1):
                     for t in range(self.tam_celda):
                                 if(lista_puntos[0]-(t+1) >=0):
-                                    res[x,lista_puntos[0]-(t+1)] = 255
-                print(lista_elem_y_sig)
+                                    res[x,lista_puntos[0]-(t+1)] = 0
                 for act,sig in lista_elem_y_sig:   
                     if(sig-act <= self.tam_celda+1):
                             for t in range(sig-act):
                                 if(act+t+1 < self.shape[1]):
-                                    res[x,act+t+1] = 255
+                                    res[x,act+t+1] = 0
         self.res = res
         
     

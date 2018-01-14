@@ -41,7 +41,11 @@ class foreground_estimation(object):
         normalizacion = whiten(fe_scores)
         normalizacion = normalizacion.reshape(-1,1)
         
-        centroides,_ = kmeans(normalizacion,k_or_guess=2)
+        centroides,_ = kmeans(normalizacion,k_or_guess=2,thresh=1e-9)
+        print(centroides)
+        centroides = np.sort(centroides,axis=None)
+        centroides = [[c] for c in centroides][::-1]
+        print(centroides)
         clases,_ = vq(fe_scores.reshape(-1,1),centroides)
         lista = [[x,y,clases[c]] for x,y,c in self.x_y_c]
         return lista

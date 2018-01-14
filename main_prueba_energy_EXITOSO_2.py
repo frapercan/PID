@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 if __name__ == '__main__':
     try:
@@ -48,12 +49,14 @@ import grid_utils as grid
 GAUSSIAN_KERNELS = [1, 3, 5]
 
 
-nombre_imagen = "angel.jpg"
+
 
 #RGB = np.array(io.imread("jakob-nielsen-thumbs-up.jpg"))
 
 #RGB2 = PIL.Image.open("angel.jpg")
 #RGB2 = RGB2.filter(ImageFilter.GaussianBlur(GAUSSIAN_KERNELS[1]))
+
+nombre_imagen = "angel.jpg"
 
 thumbnail = grid.thumbnail(nombre_imagen,(200,200))
 
@@ -128,23 +131,20 @@ np.set_printoptions(threshold=1000)
 
 eg = energy_generation.energy_generation(puntos_clasificados,np.shape(RGB),10,"transformacion_distancia2.jpg")
 
-
 profundidad = eg.hacer_saliency_map()
 
-s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_prueba.jpg")
+s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_a.jpg")
 s.hacer_superpixel()
 
 """
-
-
 image = img_as_float(io.imread(thumbnail))
+print("a")
 profundidad = eg.hacer_saliency_map()
 segmentos = slic(image, n_segments = 200, sigma = 5)
+print("b")
 
 segmentos2 = np.ndarray.flatten(segmentos)
 profundidad = np.ndarray.flatten(profundidad)
-
-
 
 diccionario = {}
 
@@ -172,6 +172,6 @@ data = np.asarray(superpixel)
 cmap = plt.cm.Greys
 norm = plt.Normalize(vmin=data.min(), vmax=data.max())
 image = cmap(norm(data))
-plt.imsave("superpixel_a.jpg", image)
+plt.imsave("superpixel_p.jpg", image)
 #
 """
