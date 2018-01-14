@@ -72,7 +72,7 @@ class energy_generation(object):
 #        print(data)
 #        print("b")
 
-        cmap = plt.cm.jet
+        cmap = plt.cm.jet_r
         norm = plt.Normalize(vmin=data.min(), vmax=data.max())
         image = cmap(norm(data))
         plt.imsave(self.nombre, image)
