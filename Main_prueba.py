@@ -44,7 +44,7 @@ import grid_utils as grid
 #ORIGINALMENTE ERAN 100
 maxsize = (200, 200)
 
-#RGB2.thumbnail(maxsize, PIL.Image.ANTIALIAS)
+RGB2.thumbnail(maxsize, PIL.Image.ANTIALIAS)
 
 RGB2 = np.array(RGB2)
 print(np.shape(RGB2))
@@ -92,6 +92,6 @@ img = Image.fromarray(res_b,'RGB')
 img.save('bayesian.png','png')
 
 x_y_c = foreground_estimation.cambia_formato(mean_shift_result)
-f_estimator =   foreground_estimation.foreground_estimation(x_y_c)
+f_estimator = foreground_estimation.foreground_estimation(x_y_c)
 fe_scores = f_estimator.predictor()
 print(fe_scores)

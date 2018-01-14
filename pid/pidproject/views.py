@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Imagen, Prueba
-from .algorithms import call_to_action
+from .algorithms import *
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
+PASOS_ALGORITMO={1:grid_over_image}
+TITULOS_PASOS={1:"Superposición del grid sobre la imagen"}
 
 def index(request):
     imagenes = Imagen.objects.filter(editada=False)[:3]
@@ -43,7 +45,10 @@ def run(request):
     new_test = Prueba(original=image_selected,resultado=image_selected)
     new_test.save()
     context = {
-        'image_url':call_to_action(image_pk,new_test.pk,request.GET['gridSize']),
-        'image':image_selected
+        'image_url':PASOS_ALGORITMO[int(request.GET['paso'])](image_pk,new_test.pk,request.GET['gridSize']),
+        'image':image_selected,
+        'paso':int(request.GET['paso']),
+        'progress_percent':(int(request.GET['paso'])/9)*100,
+        'titulo':TITULOS_PASOS[int(request.GET['paso'])]
     }
     return render(request,'pidproject/run.html',context)

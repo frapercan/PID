@@ -70,15 +70,25 @@
             <h2>Imágenes subidas</h2>
             <p>Seleccione una imagen de las disponibles para la ejecución del algoritmo:</p>
             {% if imagenes %}
-            <ul>
             {% for imagen in imagenes %}
-                <li><input type="radio" id="{{ imagen.pk }}" class="selector">
-                  <div style="height:200px;width:200px">
-                    <img src="{{ imagen.archivo.url }}" class="rounded img-thumbnail">
-                  </div></input>
-                </li>
+            <div id="accordion_{{imagen.pk}}" role="tablist">
+              <div class="card">
+                <div class="card-header" role="tab" id="heading_{{imagen.pk}}">
+                  <h5 class="mb-0">
+                    <a data-toggle="collapse" href="#collapse_{{imagen.pk}}" role="button" aria-expanded="false" aria-controls="collapse_{{imagen.pk}}">
+                      {{imagen.nombre}}
+                    </a><button class="btn btn-sm btn-secondary selector" id="{{imagen.pk}}">Seleccionar</button>
+                  </h5>
+                </div>
+
+                <div id="collapse_{{imagen.pk}}" class="collapse" role="tabpanel" aria-labelledby="heading_{{imagen.pk}}" data-parent="#accordion_{{imagen.pk}}">
+                  <div class="card-body">
+                    <img class="card-img-top" src="{{imagen.archivo.url}}" alt="Card image cap" width="25%" height="25%">
+                  </div>
+                </div>
+              </div>
+            </div>
             {% endfor %}
-            </ul>
             {% endif %}
             <p><a class="btn btn-secondary" href="./imagenes" role="button">Más imágenes &raquo;</a></p>
           </div>
@@ -102,6 +112,7 @@
                 <label for="gridSize">Definir un tamaño de grid:</label>
                 <input id="gridSize" class="form-control" name="gridSize"/>
                 <input type="hidden" class="ejecutar" value="{{imagen.pk}}" name="imagePk"/>
+                <input type="hidden" value="1" name="paso"/>
                 <button type="submit" class="btn btn-primary">Ejecutar</button>
               </form>
 
@@ -127,7 +138,7 @@
     </main>
 
     <footer class="container">
-      <p>&copy; Company 2017</p>
+      <p>&copy; Grupo 4 2018</p>
     </footer>
 
     <!-- Bootstrap core JavaScript
@@ -142,6 +153,18 @@ $(function() {
 
   $(".selector").click(function(){
     $(".ejecutar").attr("value",$(this).attr("id"));
+    if($(this).hasClass("btn-secondary")){
+      $(".ejecutar").attr("value",$(this).attr("id"));
+      $(".btn-success").html("Seleccionar");
+      $(".btn-success").removeClass("btn-success").addClass("btn-secondary");
+      $(this).html("Seleccionada");
+      $(this).removeClass("btn-secondary").addClass("btn-success");
+
+    }else{
+      $(".ejecutar").attr("value","0");
+      $(this).html("Seleccionar");
+      $(this).removeClass("btn-success").addClass("btn-secondary");
+    }
   });
 
       });

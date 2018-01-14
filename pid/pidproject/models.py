@@ -3,7 +3,9 @@ from django.db import models
 # Create your models here.
 class Imagen(models.Model):
     nombre = models.CharField(max_length=200)
-    archivo = models.ImageField(upload_to="imagenes")
+    height = models.CharField(max_length=200)
+    width = models.CharField(max_length=200)
+    archivo = models.ImageField(upload_to="imagenes",height_field="height",width_field="width")
     formato = models.SlugField()
     editada = models.BooleanField(default=False)
 

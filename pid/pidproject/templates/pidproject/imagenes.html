@@ -63,11 +63,19 @@
               <img class="card-img-top" src="{{imagen.archivo.url}}" alt="Card image cap" style="height:200px;width:238px">
               <div class="card-body">
                 <h5 class="card-title">{{imagen.nombre}}</h5>
-                <p class="card-text">Relleno y forraje relleno y forraje relleno y forraje relleno y forraje relleno y forraje relleno y forraje.</p>
+                <h6 class="text-secondary">Tamaño: {{imagen.height}} x {{imagen.width}} </h6>
+                <p class="card-text">
+                  Parámetros recomendados:
+                  <ul>
+                    <li>Tamaño de grid: 10 </li>
+                    <li>Distancia: 50 </li>
+                  </ul>
+                </p>
                 <form method="get" action="./run">
                 <label for="gridSize">Definir un tamaño de grid:</label>
                 <input id="gridSize" class="form-control" name="gridSize"/>
                 <input type="hidden" value="{{imagen.pk}}" name="imagePk"/>
+                <input type="hidden" value="1" name="paso"/>
                 <button type="submit" class="btn btn-primary">Ejecutar algoritmo</button>
               </form>
               </div>
