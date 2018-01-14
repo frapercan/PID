@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Grupo 4 | Trabajo PID</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="./">Trabajo PID - Grupo 4</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="./">Inicio <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/imagenes">Imágenes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./pruebas">Pruebas</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Subir imagen</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <form class="px-4 py-3" method="post" action="./upload" enctype="multipart/form-data">{% csrf_token %}
+                <div class="form-group">
+                  <label for="subirImagen">Selecciona una imagen:</label>
+                  <input type="file" class="form-control" id="subirImagen" name="imageFile">
+                </div>
+                <button type="submit" class="btn btn-success">Subir</button>
+              </form>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main role="main">
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container">
+          <h4 class="display-4">Grupo 4</h4>
+          <h4 class="display-5">Filtro bokeh basado en la segmentación fondo/figura.</h4>
+          <p>---Rellenar con el abstract de la memoria cuando lo tengamos---</p>
+          <p><a class="btn btn-primary" href="./pruebas" role="button">Ver pruebas &raquo;</a></p>
+        </div>
+      </div>
+
+      <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col-md-6">
+            <h2>Imágenes subidas</h2>
+            <p>Seleccione una imagen de las disponibles para la ejecución del algoritmo:</p>
+            {% if imagenes %}
+            <ul>
+            {% for imagen in imagenes %}
+                <li><input type="radio" id="{{ imagen.pk }}" class="selector">
+                  <div style="height:200px;width:200px">
+                    <img src="{{ imagen.archivo.url }}" class="rounded img-thumbnail">
+                  </div></input>
+                </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+            <p><a class="btn btn-secondary" href="./imagenes" role="button">Más imágenes &raquo;</a></p>
+          </div>
+          <div class="col-md-6">
+            <h2>Subir nueva imagen</h2>
+            <p>Arrastre o seleccione una nueva imagen para generar una nueva prueba:</p>
+            <form class="px-4 py-3" method="post" action="./upload" enctype="multipart/form-data">{% csrf_token %}
+              <div class="form-group">
+                <label for="subirImagen">Selecciona una imagen:</label>
+                <input type="file" class="form-control" id="subirImagen" name="imageFile">
+              </div>
+              <button type="submit" class="btn btn-success">Subir</button>
+            </form>
+          </div>
+        </div>
+        <hr/>
+        <div class="row justify-content-center">
+          <div class="col-sm-3">
+            <p>
+              <form method="get" action="./run">
+                <label for="gridSize">Definir un tamaño de grid:</label>
+                <input id="gridSize" class="form-control" name="gridSize"/>
+                <input type="hidden" class="ejecutar" value="{{imagen.pk}}" name="imagePk"/>
+                <button type="submit" class="btn btn-primary">Ejecutar</button>
+              </form>
+
+            </p>
+          </div>
+          <div class="col-sm-3">
+            <p>
+              <form method="get" action="./imagenes">
+                <label for="gridSize">Definir un tamaño de grid:</label>
+                <input id="gridSize" class="form-control" name="gridSize"/>
+                <input type="hidden" class="ejecutar" value="{{imagen.pk}}" name="imagePk"/>
+                <button type="submit" class="btn btn-success">Ejecutar paso a paso</button>
+              </form>
+
+            </p>
+          </div>
+        </div>
+
+        <hr>
+
+      </div> <!-- /container -->
+
+    </main>
+
+    <footer class="container">
+      <p>&copy; Company 2017</p>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script>
+
+$(function() {
+
+  $(".selector").click(function(){
+    $(".ejecutar").attr("value",$(this).attr("id"));
+  });
+
+      });
+
+</script>
+
+  </body>
+</html>
