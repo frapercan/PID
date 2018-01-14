@@ -10,33 +10,37 @@ from skimage.segmentation import mark_boundaries
 from skimage.util import img_as_float
 from skimage import io
 import matplotlib.pyplot as plt
-np.set_printoptions(threshold=np.inf)
 
-image = img_as_float(io.imread("jakob-nielsen-thumbs-up.jpg"))
-profundidad = img_as_float(io.imread("transformacion_distancia.jpg"))
+class superpixel(object):
+    
+    def __init__(self,nombre_thumbnail,profundidad,nombre_salida):
+        self.nombre_thumbnail = nombre_thumbnail
+        self.profundidad = profundidad
+        self.nombre_salida = nombre_salida
+        
+    def hacer_superpixel(self):
+        image = img_as_float(io.imread(self.nombre_thumbnail))
+        segmentos = slic(image, n_segments = 200, sigma = 5)
+        segmentos2 = np.ndarray.flatten(segmentos)
+        profundidad = np.ndarray.flatten(self.profundidad)
+        diccionario = {}
+        for s,p in zip(segmentos2,profundidad): 
+            if(not(s in diccionario)):
+                diccionario[s] = p
+            else:
+                if(p > diccionario[s]):
+                    diccionario[s]=p
+        data = diccionario
 
-segmentos = slic(image, n_segments = 8, sigma = 10)
-print(segmentos)
-segmentos = np.ndarray.flatten(segmentos)
+        superpixel = list()
 
-print(segmentos)
-
-#for s,p in zip(segmentos,profundidad):
-#    print(p)
-#    diccionario = {}
-#    if(not(s in diccionario)):
-#        s = p
-#    else:
-#        if(p > diccionario[s]):
-#            diccionario[s]=p
-#data = diccionario
-#
-#cmap = plt.cm.Greys
-#norm = plt.Normalize(vmin=data.min(), vmax=data.max())
-#image = cmap(norm(data))
-#plt.imsave("superpixel.jpg", image)
-#fig = plt.figure("aaaaa")
-#ax = fig.add_subplot(1, 1, 1)
-#ax.imshow(mark_boundaries(image, segmentos))
-#print(segmentos)
-#plt.show()
+        for s in segmentos:
+            subl = list()
+            for s1 in s:
+                subl.append(diccionario[s1])
+            superpixel.append(subl)
+        data = np.asarray(superpixel)
+        cmap = plt.cm.Greys
+        norm = plt.Normalize(vmin=data.min(), vmax=data.max())
+        image = cmap(norm(data))
+        plt.imsave(self.nombre_salida, image)
