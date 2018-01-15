@@ -14,7 +14,7 @@ from scipy import ndimage
 from skimage import io
 plt.interactive(True)
 
-def unificar_eg(prof1,prof2,prof3):
+def unificar_eg(prof1,prof2,prof3,directorio_salida):
     prof_media = list()
     for i,p1 in enumerate(prof1):
         subl = list()
@@ -25,7 +25,7 @@ def unificar_eg(prof1,prof2,prof3):
     cmap = plt.cm.jet_r
     norm = plt.Normalize(vmin=data.min(), vmax=data.max())
     image = cmap(norm(data))
-    plt.imsave("profundidad_unificado.jpg", image)
+    plt.imsave(directorio_salida+"profundidad_unificado.jpg", image)
     return data
     
 class energy_generation(object):
