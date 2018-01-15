@@ -135,6 +135,8 @@ profundidad = eg.hacer_saliency_map()
 s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_s.jpg")
 s.hacer_superpixel()
 
+d = bokeh.bokeh(nombre_imagen,thumbnail,"superpixel_a.png")
+d.difuminacion_gaussiana_fondo()
 """
 image = img_as_float(io.imread(thumbnail))
 print("a")
