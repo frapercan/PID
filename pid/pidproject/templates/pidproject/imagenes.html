@@ -71,12 +71,18 @@
                     <li>Distancia: 50 </li>
                   </ul>
                 </p>
-                <form method="get" action="./run">
+
+              <form method="get" action="./run">
                 <label for="gridSize">Definir un tamaño de grid:</label>
                 <input id="gridSize" class="form-control" name="gridSize"/>
-                <input type="hidden" value="{{imagen.pk}}" name="imagePk"/>
+                <label for="gridSize">Definir distancia de clustering:</label>
+                <input id="gridSize" class="form-control" name="distance"/>
+                <label for="gridSize">Definir un valor de difuminación gaussiana: <span class="text-secondary">(σ 1,3 ó 5)</span></label>
+                <input type="number" min="1" max="3" value="2" class="form-control" name="sigma" id="myRange" style="float:left">
+                <input type="hidden" class="ejecutar" value="{{imagen.pk}}" name="imagePk"/>
                 <input type="hidden" value="1" name="paso"/>
-                <button type="submit" class="btn btn-primary">Ejecutar algoritmo</button>
+                <br>
+                <button type="submit" class="btn btn-primary btn-lg run form-control">Ejecutar algoritmo</button>
               </form>
               </div>
             </div>

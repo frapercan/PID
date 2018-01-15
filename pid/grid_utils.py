@@ -12,11 +12,23 @@ Procesamiento de Imagenes Digitales.
 
 """
 
+import PIL
+from PIL import Image, ImageFilter
 import numpy as np
 import random
 from skimage import io, color,filters
 import itertools as it
 
+
+
+def thumbnail(nombre_imagen,maximo_tamaño):
+    imagen = Image.open(nombre_imagen)
+    imagen.thumbnail( maximo_tamaño, Image.ANTIALIAS)
+    split=nombre_imagen.split("/")
+    split[-1]="thumbnail_"+split[-1]
+    nuevo_nombre = "/".join(split)#nombre_imagen[:-4] + "_thumbnail" + nombre_imagen[-4:]
+    imagen.save(nuevo_nombre)
+    return nuevo_nombre
 
 def gridear_imagen(img, divisiones):
     """Aplica un filtro sobre una imagen en forma de malla.
@@ -112,7 +124,7 @@ def visualizar_clusteres(imagen_original,mean_shift_result,formato="RGB",preclus
         return (resultado,list(clases.values()))
     else:
         resultado = np.zeros((shape),dtype='uint8')
-        resultado.flags.writeable = True    
+        resultado.flags.writeable = True
         for (i,j) in list(enumerate(mean_shift_result.cluster_ids)):
             color = preclustering[j]
             resultado[int(puntos_originales[i][0]),int(puntos_originales[i][1])]= color

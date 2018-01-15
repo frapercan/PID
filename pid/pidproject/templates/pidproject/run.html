@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
 
-    <title>Imágenes | Trabajo PID</title>
+    <title>Ejecución | Trabajo PID</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
@@ -50,7 +50,7 @@
     <main role="main">
 
       <div class="container" style="margin-top:70px">
-        <h3>Pantalla de ejecución</h3>
+        <h3>Ejecución paso a paso</h3>
         <span class="text-secondary">Paso {{paso}} de 9</span>
 
         <div class="progress">
@@ -58,14 +58,47 @@
         </div>
         <hr/>
         <h4 class="text-primary">{{titulo}}:</h4>
-        <img src="{{ image_url }}" width="75%">
+        <div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-10 offset-md-2">
+            <img  src="{{ image_url }}" width="75%" class="img-thumbnail">
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="accordion_{{imagen.pk}}" role="tablist">
+              <div class="card">
+                <div class="card-header" role="tab" id="heading_{{imagen.pk}}" data-toggle="collapse" href="#collapse_{{imagen.pk}}" role="button" aria-expanded="false" aria-controls="collapse_{{imagen.pk}}">
+                  <h5 class="mb-0">
+                    <a data-toggle="collapse" href="#collapse_{{imagen.pk}}" role="button" aria-expanded="false" aria-controls="collapse_{{imagen.pk}}">
+                      Explicación
+                    </a>
+                  </h5>
+                </div>
+
+                <div id="collapse_{{imagen.pk}}" class="collapse" role="tabpanel" aria-labelledby="heading_{{imagen.pk}}" data-parent="#accordion_{{imagen.pk}}">
+                  <div class="card-body explicacion">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div> <!-- /container -->
+
       <hr/>
       <div class="row">
         <div class="col-md-4 offset-md-10">
           <form action="./run">
             <input type="hidden" value="{{grid_size}}" id="gridSize" class="form-control" name="gridSize"/>
             <input type="hidden" value="{{image_pk}}" name="imagePk"/>
+            <input type="hidden" value="{{distance}}" name="distance"/>
+            <input type="hidden" value="{{sigma}}" name="sigma"/>
             <input type="hidden" value="{{ paso_next }}" name="paso"/>
             <input type="hidden" value="{{ test_pk }}" name="test_pk"/>
             <button class="btn btn-primary btn-lg">Siguiente paso => </button>
@@ -85,4 +118,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
   </body>
+  <script>
+
+  $(function() {
+
+    switch({{paso}}){
+      case 1:
+          $(".explicacion").html("Se superpone una parrilla con celdas del tamaño indicado sobre la imagen, y se toman los puntos intersección como subsampling de la imagen para el siguiente paso.");
+          break;
+      case 2:
+          $(".explicacion").html("Se superpone una parrilla con celdas del tamaño indicado sobre la imagen, y se toman los puntos intersección como subsampling de la imagen para el siguiente paso.");
+          break;
+      case 3:
+          $(".explicacion").html("Se superpone una parrilla con celdas del tamaño indicado sobre la imagen, y se toman los puntos intersección como subsampling de la imagen para el siguiente paso.");
+          break;
+    }
+        });
+
+  </script>
 </html>
