@@ -14,6 +14,7 @@ Procesamiento de Imagenes Digitales.
 Clase de prueba Energy Generation
 """
 
+import bokeh
 import superpixel
 import PIL
 import skimage
@@ -133,6 +134,9 @@ profundidad = eg.hacer_saliency_map()
 
 s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_k.jpg")
 s.hacer_superpixel()
+
+
+
 
 """
 

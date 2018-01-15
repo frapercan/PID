@@ -14,7 +14,7 @@ Procesamiento de Imagenes Digitales.
 """
 Clase de prueba Energy Generation
 """
-
+import bokeh
 import superpixel
 import PIL
 import skimage
@@ -132,8 +132,11 @@ np.set_printoptions(threshold=1000)
 eg = energy_generation.energy_generation(puntos_clasificados,np.shape(RGB),10,nombre_salida="transformacion_distancia.png",nombre_grid_interseccion_figura="grid_interseccion_figura.png",nombre_morfologia="morfologia.png")
 profundidad = eg.hacer_saliency_map()
 
-s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_p.jpg")
+s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_p.png")
 s.hacer_superpixel()
+
+d = bokeh.bokeh(nombre_imagen,thumbnail,"superpixel_p.png")
+d.difuminacion_gaussiana_fondo()
 
 """
 image = img_as_float(io.imread(thumbnail))

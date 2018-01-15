@@ -56,7 +56,7 @@ GAUSSIAN_KERNELS = [1, 3, 5]
 #RGB2 = PIL.Image.open("angel.jpg")
 #RGB2 = RGB2.filter(ImageFilter.GaussianBlur(GAUSSIAN_KERNELS[1]))
 
-nombre_imagen = "angel.jpg"
+nombre_imagen = "angel1.jpg"
 
 thumbnail = grid.thumbnail(nombre_imagen,(200,200))
 
@@ -133,10 +133,10 @@ eg = energy_generation.energy_generation(puntos_clasificados,np.shape(RGB),10,no
 
 profundidad = eg.hacer_saliency_map()
 
-s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_a.png")
+s = superpixel.superpixel(nombre_thumbnail=thumbnail,profundidad=profundidad,nombre_salida="superpixel_angel.png")
 s.hacer_superpixel()
 
-d = bokeh.bokeh(nombre_imagen,thumbnail,"superpixel_a.png")
+d = bokeh.bokeh(nombre_imagen,thumbnail,"superpixel_angel.png")
 d.difuminacion_gaussiana_fondo()
 
 """
