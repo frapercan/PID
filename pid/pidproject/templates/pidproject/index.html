@@ -113,7 +113,7 @@
                 <input id="gridSize" class="form-control" name="gridSize"/>
                 <input type="hidden" class="ejecutar" value="{{imagen.pk}}" name="imagePk"/>
                 <input type="hidden" value="1" name="paso"/>
-                <button type="submit" class="btn btn-primary">Ejecutar</button>
+                <button type="submit" class="btn btn-primary run">Ejecutar</button>
               </form>
 
             </p>
@@ -155,15 +155,26 @@ $(function() {
     $(".ejecutar").attr("value",$(this).attr("id"));
     if($(this).hasClass("btn-secondary")){
       $(".ejecutar").attr("value",$(this).attr("id"));
-      $(".btn-success").html("Seleccionar");
-      $(".btn-success").removeClass("btn-success").addClass("btn-secondary");
+      $(".selector").html("Seleccionar");
+      $(".selector").removeClass("btn-success").addClass("btn-secondary");
       $(this).html("Seleccionada");
       $(this).removeClass("btn-secondary").addClass("btn-success");
 
     }else{
-      $(".ejecutar").attr("value","0");
+      $(".ejecutar").attr("value","");
       $(this).html("Seleccionar");
       $(this).removeClass("btn-success").addClass("btn-secondary");
+    }
+  });
+
+  $(".run").click(function(event){
+    if($(".ejecutar").attr("value")==""){
+      event.preventDefault();
+      alert("Deberías seleccionar una imagen primero")
+    }
+    if($("#gridSize").val()==""){
+      event.preventDefault();
+      alert("Deberías seleccionar un tamaño de grid primero");
     }
   });
 

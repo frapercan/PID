@@ -6,11 +6,13 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
-PASOS_ALGORITMO={1:grid_over_image,2:meanshift,3:foreground_estimation}
-TITULOS_PASOS={1:"Superposición del grid sobre la imagen",2:"Algoritmo MeanShift",3:"Foreground estimation"}
+PASOS_ALGORITMO={1:grid_over_image,2:meanshift,3:foreground_estimation,4:energy_generation,5:bayesian}
+TITULOS_PASOS={1:"Superposición del grid sobre la imagen",2:"Algoritmo MeanShift",3:"Foreground estimation",4:"Mapa de energía",
+                5:"Clasificación bayesiana"}
+
 
 def index(request):
-    imagenes = Imagen.objects.filter(editada=False)[:3]
+    imagenes = Imagen.objects.filter(editada=False)[:10]
     context = {
         'imagenes':imagenes
     }

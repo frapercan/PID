@@ -1,4 +1,4 @@
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageFilter
 import PIL
 from .models import Imagen, Prueba
 from io import BytesIO
@@ -10,44 +10,13 @@ import grid_utils as grid
 from tempfile import NamedTemporaryFile
 import foreground_estimation as fe
 import energy_generation as eg
-
-def call_to_action(image_pk,test_pk,grid_size):
-    image_selected = Imagen.objects.get(pk=image_pk)
-    image_for_pil = Image.open("."+image_selected.archivo.url)
-
-    maxsize = (200, 200)
-
-    image_for_pil.thumbnail(maxsize, PIL.Image.ANTIALIAS)
-    ms_data = grid.puntos_interseccion(np.array(image_for_pil),int(grid_size))
-    mean_shifter = ms.MeanShift(kernel='epanechnikov_kernel')
-    mean_shift_result = mean_shifter.cluster(ms_data,kernel_bandwidth=[250,150])
-    original_points =  mean_shift_result.original_points
-    shifted_points = mean_shift_result.shifted_points
-    cluster_assignments = mean_shift_result.cluster_ids
-    image_for_pil = Image.fromarray(generar_imagen_con_grid(np.array(image_for_pil),int(grid_size)))
-    print(original_points)
-    print(shifted_points)
-    print(cluster_assignments)
-
-
-    image_for_pil.save("edited_.png","png")
-
-    fil = open("edited_.png", 'rb')
-    rd = fil.read()
-    content_file = ContentFile(rd)
-    content_file.name="edited.png"
-    image_edited = Imagen(nombre=image_selected.nombre,archivo=content_file,formato="png",editada=True)
-    image_edited.save()
-    test = Prueba.objects.get(pk=test_pk)
-    test.resultado=image_edited
-    test.save()
-
-    return image_edited.archivo.url
+import bayesian as bs
 
 def grid_over_image(image_pk,test_pk,grid_size):
     image_selected = Imagen.objects.get(pk=image_pk)
     image_for_grid = Image.open("."+image_selected.archivo.url)
     maxsize = (200, 200)
+    image_for_grid = image_for_grid.filter(ImageFilter.GaussianBlur(1))
     image_for_grid.thumbnail(maxsize, PIL.Image.ANTIALIAS)
     #ms_data = grid.puntos_interseccion(np.array(image_for_pil),int(grid_size))
     image_for_grid = Image.fromarray(grid.generar_imagen_con_grid(np.array(image_for_grid),int(grid_size)))
@@ -67,16 +36,19 @@ def grid_over_image(image_pk,test_pk,grid_size):
 def meanshift(image_pk,test_pk,grid_size):
     image_selected = Imagen.objects.get(pk=image_pk)
     image_for_pil = Image.open("."+image_selected.archivo.url)
+    image_for_pil = image_for_pil.filter(ImageFilter.GaussianBlur(1))
 
     maxsize = (200, 200)
 
     image_for_pil.thumbnail(maxsize, PIL.Image.ANTIALIAS)
     ms_data = grid.puntos_interseccion(np.array(image_for_pil),int(grid_size))
     mean_shift = ms.MeanShift(kernel='epanechnikov_kernel')
-    mean_shift_result = mean_shift.cluster(ms_data,80,kernel_bandwidth=[255,100])
+    mean_shift_result = mean_shift.cluster(ms_data,80,kernel_bandwidth=[100,255])
     original_points =  mean_shift_result.original_points
     shifted_points = mean_shift_result.shifted_points
     cluster_assignments = mean_shift_result.cluster_ids
+    print(cluster_assignments)
+
     original_points_file = open('op.npy','wb+')
     shifted_points_file = open('sp.npy','wb+')
     cluster_assignments_file = open('ca.npy','wb+')
@@ -121,14 +93,19 @@ def meanshift(image_pk,test_pk,grid_size):
 def foreground_estimation(image_pk,test_pk,grid_size):
     image_selected = Imagen.objects.get(pk=image_pk)
     image_for_pil = Image.open("."+image_selected.archivo.url)
+    maxsize = (200, 200)
+
+    image_for_pil.thumbnail(maxsize, PIL.Image.ANTIALIAS)
     test = Prueba.objects.get(pk=test_pk)
     op = np.load(test.op_file)
     sp = np.load(test.sp_file)
     ca = np.load(test.ca_file)
     mean_shift_result = ms.MeanShiftResult(op,sp,ca)
+
     x_y_c = fe.cambia_formato(mean_shift_result)
     foreground_estimator = fe.foreground_estimation(x_y_c)
     classified = foreground_estimator.classify_points()
+    print(classified)
     morf = eg.energy_generation(classified,np.shape(np.array(image_for_pil)),int(grid_size),nombre_salida="transformacion_distancia.png",nombre_grid_interseccion_figura="grid_interseccion_figura.png",nombre_morfologia="morfologia.png")
     morf.interseccion_grid_figura()
     morf.morfologia()
@@ -139,6 +116,73 @@ def foreground_estimation(image_pk,test_pk,grid_size):
     content_file = ContentFile(rd)
     content_file.name="edited.png"
     image_edited = Imagen(nombre=morf.nombre_morfologia+"_{}".format(image_selected.nombre),archivo=content_file,formato="png",editada=True)
+    image_edited.save()
+    test.resultado=image_edited
+    test.save()
+
+    return image_edited.archivo.url
+
+def energy_generation(image_pk,test_pk,grid_size):
+    image_selected = Imagen.objects.get(pk=image_pk)
+    image_for_pil = Image.open("."+image_selected.archivo.url)
+    maxsize = (200, 200)
+
+    image_for_pil.thumbnail(maxsize, PIL.Image.ANTIALIAS)
+    test = Prueba.objects.get(pk=test_pk)
+    op = np.load(test.op_file)
+    sp = np.load(test.sp_file)
+    ca = np.load(test.ca_file)
+    mean_shift_result = ms.MeanShiftResult(op,sp,ca)
+
+    x_y_c = fe.cambia_formato(mean_shift_result)
+    foreground_estimator = fe.foreground_estimation(x_y_c)
+    classified = foreground_estimator.classify_points()
+    print(classified)
+    energy = eg.energy_generation(classified,np.shape(np.array(image_for_pil)),int(grid_size),nombre_salida="transformacion_distancia_{}.png".format(image_selected.nombre),nombre_grid_interseccion_figura="grid_interseccion_figura.png",nombre_morfologia="morfologia.png")
+    energy_map = energy.hacer_saliency_map()
+
+    fil = open(energy.nombre_salida, 'rb')
+    rd = fil.read()
+    content_file = ContentFile(rd)
+    content_file.name="edited.png"
+    image_edited = Imagen(nombre=energy.nombre_salida,archivo=content_file,formato="png",editada=True)
+    image_edited.save()
+    test.resultado=image_edited
+    test.save()
+
+    return image_edited.archivo.url
+
+def bayesian(image_pk,test_pk,grid_size):
+    image_selected = Imagen.objects.get(pk=image_pk)
+    image_for_pil = Image.open("."+image_selected.archivo.url)
+    maxsize = (200, 200)
+
+    image_for_pil.thumbnail(maxsize, PIL.Image.ANTIALIAS)
+    test = Prueba.objects.get(pk=test_pk)
+    op = np.load(test.op_file)
+    sp = np.load(test.sp_file)
+    ca = np.load(test.ca_file)
+    mean_shift_result = ms.MeanShiftResult(op,sp,ca)
+
+    new_assignments = bs.reduce_clusters(mean_shift_result,int(grid_size))
+    print(new_assignments)
+    mean_shift_result.cluster_ids=new_assignments
+
+    bayesian = bs.BayesianClassifier(mean_shift_result)
+    bayesian.show_classifiers()
+
+    LISTA_PUNTOS_BAYESIAN=grid.puntos_interseccion(np.array(image_for_pil), 1)
+    bayesian_clustering = bayesian.cluster_data_points(LISTA_PUNTOS_BAYESIAN)
+    bayesian_result = ms.MeanShiftResult(LISTA_PUNTOS_BAYESIAN,np.zeros(1),bayesian_clustering)
+    res_b = grid.visualizar_clusteres(np.array(image_for_pil),bayesian_result)
+    img = Image.fromarray(res_b[0],'RGB')
+    img.save("bayesian_{}.png".format(image_selected.nombre),'png')
+
+    fil = open("bayesian_{}.png".format(image_selected.nombre), 'rb')
+    rd = fil.read()
+    content_file = ContentFile(rd)
+    content_file.name="edited.png"
+    image_edited = Imagen(nombre="bayesian_{}.png".format(image_selected.nombre),archivo=content_file,formato="png",editada=True)
     image_edited.save()
     test.resultado=image_edited
     test.save()
