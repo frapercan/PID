@@ -6,9 +6,9 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
-PASOS_ALGORITMO={1:grid_over_image,2:meanshift,3:foreground_estimation,4:energy_generation,5:bayesian}
+PASOS_ALGORITMO={1:grid_over_image,2:meanshift,3:foreground_estimation,4:energy_generation,5:superpixel,6:adaptive_bokeh}
 TITULOS_PASOS={1:"Superposición del grid sobre la imagen",2:"Algoritmo MeanShift",3:"Foreground estimation",4:"Mapa de energía",
-                5:"Clasificación bayesiana"}
+                5:"Generación del superpixel",6:"Simulación del efecto bokeh"}
 
 
 def index(request):
@@ -50,7 +50,7 @@ def run(request):
     else:
         test = Prueba.objects.get(pk=request.GET['test_pk'])
     context = {
-        'image_url':PASOS_ALGORITMO[int(request.GET['paso'])](image_pk,test.pk,request.GET['gridSize']),
+        'image_url':PASOS_ALGORITMO[int(request.GET['paso'])](image_pk,test.pk,request.GET['gridSize'],int(request.GET['distance']),int(request.GET['sigma'])),
         'image':image_selected,
         'image_pk':request.GET['imagePk'],
         'test_pk':test.pk,
@@ -58,6 +58,8 @@ def run(request):
         'paso_next':int(request.GET['paso'])+1,
         'progress_percent':(int(request.GET['paso'])/9)*100,
         'titulo':TITULOS_PASOS[int(request.GET['paso'])],
-        'grid_size':request.GET['gridSize']
+        'grid_size':request.GET['gridSize'],
+        'distance':request.GET['distance'],
+        'sigma':request.GET['sigma']
     }
     return render(request,'pidproject/run.html',context)

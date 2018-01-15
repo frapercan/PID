@@ -111,24 +111,19 @@
               <form method="get" action="./run">
                 <label for="gridSize">Definir un tamaño de grid:</label>
                 <input id="gridSize" class="form-control" name="gridSize"/>
+                <label for="gridSize">Definir distancia de clustering:</label>
+                <input id="gridSize" class="form-control" name="distance"/>
+                <label for="gridSize">Definir un valor de difuminación gaussiana: <span class="text-secondary">(σ 1,3 ó 5)</span></label>
+                <input type="number" min="1" max="3" value="2" class="form-control" name="sigma" id="myRange" style="float:left">
                 <input type="hidden" class="ejecutar" value="{{imagen.pk}}" name="imagePk"/>
                 <input type="hidden" value="1" name="paso"/>
-                <button type="submit" class="btn btn-primary run">Ejecutar</button>
+                <br>
+                <button type="submit" class="btn btn-primary btn-lg run form-control">Ejecutar</button>
               </form>
 
             </p>
           </div>
-          <div class="col-sm-3">
-            <p>
-              <form method="get" action="./imagenes">
-                <label for="gridSize">Definir un tamaño de grid:</label>
-                <input id="gridSize" class="form-control" name="gridSize"/>
-                <input type="hidden" class="ejecutar" value="{{imagen.pk}}" name="imagePk"/>
-                <button type="submit" class="btn btn-success">Ejecutar paso a paso</button>
-              </form>
 
-            </p>
-          </div>
         </div>
 
         <hr>
@@ -177,6 +172,8 @@ $(function() {
       alert("Deberías seleccionar un tamaño de grid primero");
     }
   });
+
+  //$(".slider").slider();
 
       });
 
