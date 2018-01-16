@@ -76,11 +76,37 @@ class bokeh(object):
         imagen_superpixel_medio3 = PIL.Image.open(self.directorio_metadatos+"Nivel_medio_posterior.png").convert('L')
         imagen_superpixel_figura = PIL.Image.open(self.directorio_metadatos+"Nivel_figura.png").convert('L')
 
+        aux1 = PIL.Image.new("RGBA", imagen_original.size)
+        aux1.paste(imagen_original5, (0,0), imagen_superpixel_fondo)
+        aux1.save(self.directorio_metadatos+"partes_gaussiano_1"+".png")
+        
+        
+        aux2 = PIL.Image.new("RGBA", imagen_original.size)
+        aux2.paste(imagen_original4, (0,0), imagen_superpixel_medio1)
+        aux2.save(self.directorio_metadatos+"partes_gaussiano_2"+".png")
+        
+        aux3 = PIL.Image.new("RGBA", imagen_original.size)
+        aux3.paste(imagen_original3, (0,0), imagen_superpixel_medio2)
+        aux3.save(self.directorio_metadatos+"partes_gaussiano_3"+".png")
+        
+        
+        aux4 = PIL.Image.new("RGBA", imagen_original.size)
+        aux4.paste(imagen_original2, (0,0), imagen_superpixel_medio3)
+        aux4.save(self.directorio_metadatos+"partes_gaussiano_4"+".png")
+        
+        aux5 = PIL.Image.new("RGBA", imagen_original.size)
+        aux5.paste(imagen_original, (0,0), imagen_superpixel_figura)
+        aux5.save(self.directorio_metadatos+"partes_gaussiano_5"+".png")
+        
+        
         final = PIL.Image.new("RGBA", imagen_original.size)
-        final.paste(imagen_original5, (0,0), imagen_superpixel_fondo)
+        final.paste(imagen_original5, (0,0), imagen_superpixel_fondo)     
         final.paste(imagen_original4, (0,0), imagen_superpixel_medio3)
+        
         final.paste(imagen_original3, (0,0), imagen_superpixel_medio2)
+        
         final.paste(imagen_original2, (0,0), imagen_superpixel_medio1)
+        
         final.paste(imagen_original, (0,0), imagen_superpixel_figura)
         final = final.filter(PIL.ImageFilter.SMOOTH)
         final.save(self.directorio_resultados+self.nombre_fichero_salida+"gaussiano_segun_superpixel"+".png")
