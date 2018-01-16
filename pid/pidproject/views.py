@@ -56,7 +56,7 @@ def run(request):
         'test_pk':test.pk,
         'paso':int(request.GET['paso']),
         'paso_next':int(request.GET['paso'])+1,
-        'progress_percent':(int(request.GET['paso'])/9)*100,
+        'progress_percent':(int(request.GET['paso'])/6)*100,
         'titulo':TITULOS_PASOS[int(request.GET['paso'])],
         'grid_size':request.GET['gridSize'],
         'distance':request.GET['distance'],

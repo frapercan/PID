@@ -28,11 +28,11 @@ def grid_over_image(image_pk,test_pk,grid_size,distance,sigma):
     image_for_grid.thumbnail(maxsize, PIL.Image.ANTIALIAS)
     #ms_data = grid.puntos_interseccion(np.array(image_for_pil),int(grid_size))
     image_for_grid = Image.fromarray(grid.generar_imagen_con_grid(np.array(image_for_grid),int(grid_size)))
-    image_for_grid.save("grid_{}.png".format(image_selected.nombre),"png")
-    fil = open("grid_{}.png".format(image_selected.nombre), 'rb')
+    image_for_grid.save("./imagenes/tmp/grid/grid_{}.png".format(image_selected.nombre),"png")
+    fil = open("./imagenes/tmp/grid/grid_{}.png".format(image_selected.nombre), 'rb')
     rd = fil.read()
     content_file = ContentFile(rd)
-    content_file.name="edited.png"
+    content_file.name="./edited/edited.png"
     image_edited = Imagen(nombre="grid_{}.png".format(image_selected.nombre),archivo=content_file,formato="png",editada=True)
     image_edited.save()
     test = Prueba.objects.get(pk=test_pk)
@@ -55,7 +55,6 @@ def meanshift(image_pk,test_pk,grid_size,distance,sigma):
     original_points =  mean_shift_result.original_points
     shifted_points = mean_shift_result.shifted_points
     cluster_assignments = mean_shift_result.cluster_ids
-    print(cluster_assignments)
 
     original_points_file = open('op.npy','wb+')
     shifted_points_file = open('sp.npy','wb+')
@@ -68,13 +67,13 @@ def meanshift(image_pk,test_pk,grid_size,distance,sigma):
     shifted_points_file.close()
     cluster_assignments_file.close()
 
-    image_for_grid.save("ms_{}.png".format(image_selected.nombre),"png")
-    fil = open("ms_{}.png".format(image_selected.nombre), 'rb')
+    image_for_grid.save("./imagenes/tmp/ms/ms_{}.png".format(image_selected.nombre),"png")
+    fil = open("./imagenes/tmp/ms/ms_{}.png".format(image_selected.nombre), 'rb')
     rd = fil.read()
     content_file = ContentFile(rd)
     fil.close()
-    content_file.name="edited.png"
-    image_edited = Imagen(nombre="ms_{}.png".format(image_selected.nombre),archivo=content_file,formato="png",editada=True)
+    content_file.name="./edited/edited.png"
+    image_edited = Imagen(nombre="./imagenes/tmp/ms/ms_{}.png".format(image_selected.nombre),archivo=content_file,formato="png",editada=True)
     image_edited.save()
     test = Prueba.objects.get(pk=test_pk)
     original_points_file = open('op.npy','rb')
@@ -118,12 +117,12 @@ def foreground_estimation(image_pk,test_pk,grid_size,distance,sigma):
     morf.interseccion_grid_figura()
     morf.morfologia()
     morf_img = Image.fromarray(morf.res,'L')
-    morf_img.save(morf.nombre_morfologia+"_{}".format(image_selected.nombre),'png')
-    fil = open(morf.nombre_morfologia+"_{}".format(image_selected.nombre), 'rb')
+    morf_img.save("./imagenes/tmp/morfologia/"+morf.nombre_morfologia+"_{}".format(image_selected.nombre),'png')
+    fil = open("./imagenes/tmp/morfologia/"+morf.nombre_morfologia+"_{}".format(image_selected.nombre), 'rb')
     rd = fil.read()
     content_file = ContentFile(rd)
-    content_file.name="edited.png"
-    image_edited = Imagen(nombre=morf.nombre_morfologia+"_{}".format(image_selected.nombre),archivo=content_file,formato="png",editada=True)
+    content_file.name="./edited/edited.png"
+    image_edited = Imagen(nombre="./imagenes/tmp/morfologia/"+morf.nombre_morfologia+"_{}".format(image_selected.nombre),archivo=content_file,formato="png",editada=True)
     image_edited.save()
     test.resultado=image_edited
     test.save()
@@ -146,13 +145,13 @@ def energy_generation(image_pk,test_pk,grid_size,distance,sigma):
     foreground_estimator = fe.foreground_estimation(x_y_c)
     classified = foreground_estimator.classify_points()
     print(classified)
-    energy = eg.energy_generation(classified,np.shape(np.array(image_for_pil)),int(grid_size),nombre_salida="transformacion_distancia_{}.png".format(image_selected.nombre),nombre_grid_interseccion_figura="grid_interseccion_figura.png",nombre_morfologia="morfologia.png")
+    energy = eg.energy_generation(classified,np.shape(np.array(image_for_pil)),int(grid_size),nombre_salida="./imagenes/tmp/eg/transformacion_distancia_{}.png".format(image_selected.nombre),nombre_grid_interseccion_figura="grid_interseccion_figura.png",nombre_morfologia="morfologia.png")
     energy_map = energy.hacer_saliency_map()
 
     fil = open(energy.nombre_salida, 'rb')
     rd = fil.read()
     content_file = ContentFile(rd)
-    content_file.name="edited.png"
+    content_file.name="./edited/edited.png"
     image_edited = Imagen(nombre=energy.nombre_salida,archivo=content_file,formato="png",editada=True)
     image_edited.save()
     test.resultado=image_edited
@@ -214,16 +213,16 @@ def superpixel(image_pk,test_pk,grid_size,distance,sigma):
     foreground_estimator = fe.foreground_estimation(x_y_c)
     classified = foreground_estimator.classify_points()
     print(classified)
-    energy = eg.energy_generation(classified,np.shape(np.array(image_for_pil)),int(grid_size),nombre_salida="transformacion_distancia_{}.png".format(image_selected.nombre),nombre_grid_interseccion_figura="grid_interseccion_figura.png",nombre_morfologia="morfologia.png")
+    energy = eg.energy_generation(classified,np.shape(np.array(image_for_pil)),int(grid_size),nombre_salida="./imagenes/tmp/eg/transformacion_distancia_{}.png".format(image_selected.nombre),nombre_grid_interseccion_figura="grid_interseccion_figura.png",nombre_morfologia="morfologia.png")
     energy_map = energy.hacer_saliency_map()
 
-    s = spx.superpixel(nombre_thumbnail=thumbnail,profundidad=energy_map,nombre_salida="superpixel_{}.png".format(image_selected.nombre))
+    s = spx.superpixel(nombre_thumbnail=thumbnail,profundidad=energy_map,nombre_salida="./imagenes/tmp/spx/superpixel_{}.png".format(image_selected.nombre))
     s.hacer_superpixel()
 
     fil = open(s.nombre_salida, 'rb')
     rd = fil.read()
     content_file = ContentFile(rd)
-    content_file.name="edited.png"
+    content_file.name="./edited/edited.png"
     image_edited = Imagen(nombre=energy.nombre_salida,archivo=content_file,formato="png",editada=True)
     image_edited.save()
     test.resultado=image_edited
@@ -240,14 +239,14 @@ def adaptive_bokeh(image_pk,test_pk,grid_size,distance,sigma):
 
     test = Prueba.objects.get(pk=test_pk)
 
-    d = bokeh.bokeh("."+image_selected.archivo.url,thumbnail,"superpixel_{}.png".format(image_selected.nombre))
+    d = bokeh.bokeh("."+image_selected.archivo.url,thumbnail,"./imagenes/tmp/spx/superpixel_{}.png".format(image_selected.nombre))
     d.difuminacion_gaussiana_fondo()
 
-    fil = open("gauss_adaptativo.png", 'rb')
+    fil = open("./imagenes/tmp/gauss/gauss_adaptativo.png", 'rb')
     rd = fil.read()
     content_file = ContentFile(rd)
-    content_file.name="edited.png"
-    image_edited = Imagen(nombre="gauss_adaptativo{}.png".format(image_selected.nombre),archivo=content_file,formato="png",editada=True)
+    content_file.name="./edited/edited.png"
+    image_edited = Imagen(nombre="gauss_adaptativo_{}.png".format(image_selected.nombre),archivo=content_file,formato="png",editada=True)
     image_edited.save()
     test.resultado=image_edited
     test.save()
