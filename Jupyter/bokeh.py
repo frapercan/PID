@@ -109,6 +109,6 @@ class bokeh(object):
         
         final.paste(imagen_original, (0,0), imagen_superpixel_figura)
         final = final.filter(PIL.ImageFilter.SMOOTH)
-        final.save(self.directorio_resultados+self.nombre_fichero_salida+"gaussiano_segun_superpixel"+".png")
+        final.save(self.directorio_resultados+self.nombre_fichero_salida+"_gaussiano_segun_superpixel"+".png")
           
 
