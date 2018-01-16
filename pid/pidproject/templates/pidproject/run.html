@@ -51,7 +51,7 @@
 
       <div class="container" style="margin-top:70px">
         <h3>Ejecución paso a paso</h3>
-        <span class="text-secondary">Paso {{paso}} de 9</span>
+        <span class="text-secondary">Paso {{paso}} de 6</span>
 
         <div class="progress">
           <div class="progress-bar" role="progressbar" aria-valuenow="{{paso}}" style="width: {{progress_percent}}%" aria-valuemin="0" aria-valuemax="8"></div>
@@ -89,22 +89,45 @@
             </div>
           </div>
         </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cargando <img src="/imagenes/loading.gif" width="10%"></h5>
+              </div>
+              <div class="modal-body">
+                Este paso del algoritmo puede tardar en función de la cantidad de información a procesar y los parámetros.
+              </div>
+            </div>
+          </div>
+        </div>
       </div> <!-- /container -->
 
       <hr/>
+
+        <div class="row comentario" hidden>
+          <div class="col-md-10 offset-md-1">
+            <div class="form-group">
+              <label for="comment">Comenta la prueba:</label>
+              <textarea class="form-control" id="comment" placeholder="Añade un comentario a la prueba..." maxlength="1000" name="comment" form="ejecucion"></textarea>
+            </div>
+          </div>
+        </div>
       <div class="row">
         <div class="col-md-4 offset-md-10">
-          <form action="./run">
+          <form action="./run" id="ejecucion">
             <input type="hidden" value="{{grid_size}}" id="gridSize" class="form-control" name="gridSize"/>
             <input type="hidden" value="{{image_pk}}" name="imagePk"/>
             <input type="hidden" value="{{distance}}" name="distance"/>
             <input type="hidden" value="{{sigma}}" name="sigma"/>
             <input type="hidden" value="{{ paso_next }}" name="paso"/>
             <input type="hidden" value="{{ test_pk }}" name="test_pk"/>
-            <button class="btn btn-primary btn-lg">Siguiente paso => </button>
+            <button class="btn btn-primary btn-lg siguiente" data-toggle="modal" data-target="#exampleModal">Siguiente paso => </button>
           </form>
         </div>
       </div>
+
     </main>
 <hr/>
     <footer class="container">
@@ -122,15 +145,72 @@
 
   $(function() {
 
+    if({{paso}}==6){
+      $(".progress-bar").addClass("bg-success");
+      $(".siguiente").addClass("btn-success").removeClass("btn-primary");
+      $(".comentario").removeAttr('hidden');
+    }
+
     switch({{paso}}){
       case 1:
-          $(".explicacion").html("Se superpone una parrilla con celdas del tamaño indicado sobre la imagen, y se toman los puntos intersección como subsampling de la imagen para el siguiente paso.");
-          break;
+        $(".explicacion")
+        .html("El primer paso suele denominarse <i>subsampling</i> en la literatura.<br>"+
+         "En primera instancia, reescalamos la imagen de su tamaño original manteniendo sus proporciones,"+
+         " para que los algoritmos puedan ejecutar sin requerir un altísimo coste computacional. En segundo lugar, "+
+         "se superpone un grid sobre la imagen, donde cada celda tiene un lado igual al <i>grid_size</i> definido al principio "+
+         "de la ejecución. <br>Esto tiene como objetivo visualizar qué puntos de la imagen van a ser tomados como entrada del paso 2, "+
+         "ya que considerar la imagen entera sería demasiado costoso e incluso contraproducente, al tener un exceso de información con demasiada localidad (muchos píxeles de la misma zona de la imagen tendrán valores parecidos). "+
+         "<br>Los puntos que se clasificarán con el algoritmo MeanShift en el siguiente paso serán aquellos de la imagen reescalada que coincidan con una intersección entre dos líneas del grid.");
+        break;
       case 2:
-          $(".explicacion").html("Se superpone una parrilla con celdas del tamaño indicado sobre la imagen, y se toman los puntos intersección como subsampling de la imagen para el siguiente paso.");
-          break;
+        $(".explicacion")
+        .html("El segundo paso consiste en aplicar el algoritmo <i>MeanShift</i> al conjunto de puntos seleccionado.<br>"+
+         "El algoritmo MeanShift es un algoritmo no paramétrico de clasificacion o <i>clustering</i> que busca clasificar todos los datos de entrada en una clase.<br>"+
+         "Al contrario que en otros algoritmos de clustering, éste no requiere que se parametrice el número de clases que se van a generar, ya que el propio algoritmo "+
+         "lo estimará en base a los datos. El algoritmo busca los máximos de una función de densidad, de forma que cada uno de estos máximos será el centroide de una clase distinta. "+
+         "Cada punto se moverá en cada iteración en la dirección del punto medio del vecindario que se considere (de ahí el parámetro distancia, que influye mucho sobre el tiempo de ejecución del algoritmo) "+
+         "hasta que haya pasado un número de iteraciones sin que los puntos se sigan moviendo, momento en que se considera que ya se ha obtenido la distribución de centros mejor.<br>"+
+         "En la imagen superior vemos que se ha generado un color (aleatorio) por cada uno de los clusters encontrados, por lo que puntos coloreados igual pertenecerán a la misma clasificación. "+
+         "Esta representación sigue haciéndose sobre la imagen reescalada, ya que facilita la visualización.");
+
+        break;
       case 3:
-          $(".explicacion").html("Se superpone una parrilla con celdas del tamaño indicado sobre la imagen, y se toman los puntos intersección como subsampling de la imagen para el siguiente paso.");
+        $(".explicacion")
+        .html("El paso de Foreground Estimation es bastante explicativo con su propio nombre: trata de estimar qué puntos de los clasificados son figura principal, y qué puntos son fondo.<br>"+
+         "Esto se hace en varias etapas. Primero trata de asignar a cada cluster estimado en el paso anterior una puntuación, llamada FE Score, en base a dos criterios:<br>"+
+         "<ul><li>Los objetos figura están por lo general cerca del centro de la imagen y con un menor contacto con los bordes.</li><li>Las variaciones espaciales de estos objetos son relativamente pequeñas comparadas con los objetos fondo.</li></ul>"+
+         "En base a esto se construye un vector de tantos pesos FE como clusters se hayan inferido del MeanShift y se procede a catalogar cada uno de ellos como <i>fondo</i> o <i>figura</i>. Esto se hace "+
+         "mediante el algoritmo K-medias, que es otro algoritmo de clustering que busca primero los centros de K clusters (en nuestro caso 2) para luego catalogar cada muestra en uno de ellos, de modo que "+
+         "cada dato pertenece al grupo cuyo valor medio es más cercano. En base a ésto obtenemos una serie de puntos que son fondo y otros que son figura. Los puntos figura se dibujan como puntos negros sobre un fondo blanco "+
+         "y se dibujan en negro también las líneas que los unen. Esto es porque, a diferencia de esta implementación, en el artículo original utilizaban todos los puntos de las líneas del grid y no sólo las intersecciones, por lo que las líneas "+
+         "deben ser consideradas. Nuestra versión, si bien pierde información en este paso, realiza los cálculos con más rapidez.<br>"+
+         "Una vez dibujadas las líneas se rellenan las zonas mediante morfología con un elemento estructural cuadrado que sólo aplica si cuatro puntos formando un cuadrado son todos figura. Esta morfología es la que puede verse en la imagen.");
+          break;
+
+      case 4:
+        $(".explicacion")
+        .html("El paso del mapa de energía aplica la transformada de la distancia a la imagen en blanco y negro obtenida del paso anterior, que corresponde al <i>foreground</i> estimado.<br>"+
+         "La Distance Transforme (DT) genera un mapa de distancias en el que el valor de cada píxel es sustituido por el valor de la distancia entre "+
+         "su centroide y la frontera.");
+          break;
+
+      case 5:
+        $(".explicacion")
+        .html("En este paso se genera una segmentación por superpíxeles de la imagen.<br>"+
+         "Ésta se realiza utilizando una librería de Python, <b>Scikit Image</b>, que tiene funciones para realizarla."+
+         " Nos permite superponer los superpíxeles generados (visibles en la imagen) al mapa de energía obtenido y generar un mapa de profundidad estimado, "+
+         "en el que un nivel de gris más bajo representa mayor lejanía del objeto en la imagen. Si bien en esta prueba se realiza sobre una sola imagen en RGB "+
+         "con un solo valor de difuminación gaussiana, se obtienen resultados más finos al realizar esta estimación en paralelo sobre tres espacios de color (RGB, HSV y LAB), "+
+         "y con tres valores de sigma diferentes (1,3 y 5 en el artículo referenciado). Se omiten esos pasos en esta demostración porque el proceso completo es lento y costoso, ya que tiene que realizar todo esto sobre 9 imágenes distintas.<br>"+
+         "Sin embargo, el resultado estimado en una sola de ellas (ver imagen) es aceptable y se puede proceder a realizar un desenfoque adaptativo basado en la distancia estimada en este mapa."+
+         "");
+          break;
+
+      case 6:
+        $(".explicacion")
+        .html("Este es el resultado del paso final, donde se aplican una serie de filtros gaussianos con diferentes sigmas en función de la distancia (simbolizada como el nivel de gris en el mapa de profundidad anterior).<br>"+
+         "La imagen se reescala a su tamaño original y se obtiene un difuminado basado en la distancia que, si bien no aporta el mismo sentido estético que el efecto bokeh de las cámaras DSLR, y está muy lejos de funcionar a la perfección,"+
+         " estima bastante bien (en función de los parámetros de entrada) la difuminación del fondo manteniendo la nitidez de las figuras principales.");
           break;
     }
         });

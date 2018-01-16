@@ -12,6 +12,7 @@ class Imagen(models.Model):
 class Prueba(models.Model):
     original = models.ForeignKey('Imagen',on_delete=models.CASCADE,related_name="%(app_label)s_%(class)s_original")
     resultado = models.ForeignKey('Imagen',on_delete=models.CASCADE,related_name="%(app_label)s_%(class)s_resultado")
-    op_file = models.FileField(upload_to="tmp/")
-    sp_file = models.FileField(upload_to="tmp/")
-    ca_file = models.FileField(upload_to="tmp/")
+    comentario = models.CharField(max_length=1000)
+    op_file = models.FileField(upload_to="tmp/npy/")
+    sp_file = models.FileField(upload_to="tmp/npy/")
+    ca_file = models.FileField(upload_to="tmp/npy/")

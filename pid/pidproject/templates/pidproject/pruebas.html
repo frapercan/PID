@@ -57,28 +57,37 @@
         <h3>Historial de pruebas</h3>
         <hr/>
         {% for prueba in pruebas %}
-        <div class="row justify-content-center">
-          <div class="col-sm-3">
-            <div class="card" style="width: 15rem;">
-              <img class="card-img-top" src="{{prueba.original.archivo.url}}" alt="Card image cap" style="height:200px;width:238px">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header">
+                Prueba
+              </div>
+              <div class="row">
+                <div class="col-sm-5 offset-sm-1">
+                  <figure class="figure">
+                    <img class="figure-img img-fluid rounded" src="{{prueba.original.archivo.url}}" alt="Card image cap" style="width:100%%">
+                    <figcaption class="figure-caption">Imagen original.</figcaption>
+                  </figure>
+                </div>
+                <div class="col-sm-5">
+                  <figure class="figure">
+                    <img class="figure-img img-fluid rounded" src="{{prueba.resultado.archivo.url}}" alt="Card image cap" style="width:100%">
+                    <figcaption class="figure-caption">Imagen resultado.</figcaption>
+                  </figure>
+                </div>
+              </div>
               <div class="card-body">
-                <h5 class="card-title">Original</h5>
-                <p class="card-text">Relleno y forraje relleno y forraje relleno y forraje relleno y forraje relleno y forraje relleno y forraje.</p>
+                <span class="text-secondary">Click derecho -> Ver imagen para ampliar</span>
+                <h5 class="card-title">Comentario</h5>
+
+                <p class="card-text">{{prueba.comentario}}</p>
 
               </div>
             </div>
             </div>
-            <div class="col-sm-3">
-            <div class="card" style="width: 15rem;">
-              <img class="card-img-top" src="{{prueba.resultado.archivo.url}}" alt="Card image cap" style="height:200px;width:238px">
-              <div class="card-body">
-                <h5 class="card-title">Resultado</h5>
-                <p class="card-text">Relleno y forraje relleno y forraje relleno y forraje relleno y forraje relleno y forraje relleno y forraje.</p>
-
-              </div>
-            </div>
           </div>
-          </div>
+          <br>
         {% endfor %}
 
       </div> <!-- /container -->

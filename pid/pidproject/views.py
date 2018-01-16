@@ -12,7 +12,7 @@ TITULOS_PASOS={1:"Superposición del grid sobre la imagen",2:"Algoritmo MeanShif
 
 
 def index(request):
-    imagenes = Imagen.objects.filter(editada=False)[:10]
+    imagenes = Imagen.objects.filter(editada=False)
     context = {
         'imagenes':imagenes
     }
@@ -44,6 +44,15 @@ def upload(request):
 def run(request):
     image_pk = request.GET['imagePk']
     image_selected = Imagen.objects.get(pk=image_pk)
+    if(int(request.GET['paso'])>6):
+        test = Prueba.objects.get(pk=request.GET['test_pk'])
+        test.comentario=request.GET['comment']
+        test.save()
+        pruebas = Prueba.objects.all()
+        context = {
+            'pruebas':pruebas
+        }
+        return render(request,'pidproject/pruebas.html',context)
     if('test_pk' not in request.GET):
         test = Prueba(original=image_selected,resultado=image_selected)
         test.save()
@@ -56,7 +65,7 @@ def run(request):
         'test_pk':test.pk,
         'paso':int(request.GET['paso']),
         'paso_next':int(request.GET['paso'])+1,
-        'progress_percent':(int(request.GET['paso'])/9)*100,
+        'progress_percent':(int(request.GET['paso'])/6)*100,
         'titulo':TITULOS_PASOS[int(request.GET['paso'])],
         'grid_size':request.GET['gridSize'],
         'distance':request.GET['distance'],

@@ -58,8 +58,9 @@
         <div class="container">
           <h4 class="display-4">Grupo 4</h4>
           <h4 class="display-5">Filtro bokeh basado en la segmentación fondo/figura.</h4>
-          <p>---Rellenar con el abstract de la memoria cuando lo tengamos---</p>
-          <p><a class="btn btn-primary" href="./pruebas" role="button">Ver pruebas &raquo;</a></p>
+          <p>En este trabajo, se realiza un proceso de detección de múltiples figuras en una fotografía para clasificar el fondo y las distintas figuras, basados en el trabajo previo de otro artículo. Una vez clasificados, se aplica una simulación del efecto bokeh con el que se obtiene la misma fotografía pero con un desenfoque parecido al que hacen las cámaras fotográficas o el ojo humano, en el que la figura principal mantiene su nitidez y el emborronado es basado en la distancia.</p>
+          <p><a class="btn btn-primary" href="./pruebas" role="button">Ver pruebas &raquo;</a><a class="btn" href="/imagenes/TarrioGete_RI.pdf" role="button">Descargar artículo</a>
+            </p>
         </div>
       </div>
 
@@ -67,8 +68,8 @@
         <!-- Example row of columns -->
         <div class="row">
           <div class="col-md-6">
-            <h2>Imágenes subidas</h2>
-            <p>Seleccione una imagen de las disponibles para la ejecución del algoritmo:</p>
+            <h2>Imágenes subidas </h2><span class="badge badge-info">10 principales</span>
+            <p>Selecciona una imagen de las disponibles para la ejecución del algoritmo:</p>
             {% if imagenes %}
             {% for imagen in imagenes %}
             <div id="accordion_{{imagen.pk}}" role="tablist">
@@ -94,7 +95,7 @@
           </div>
           <div class="col-md-6">
             <h2>Subir nueva imagen</h2>
-            <p>Arrastre o seleccione una nueva imagen para generar una nueva prueba:</p>
+            <p>Selecciona una nueva imagen para generar una nueva prueba:</p>
             <form class="px-4 py-3" method="post" action="./upload" enctype="multipart/form-data">{% csrf_token %}
               <div class="form-group">
                 <label for="subirImagen">Selecciona una imagen:</label>
