@@ -4,12 +4,6 @@ Created on Tue Dec 19 18:30:01 2017
 Procesamiento de Imagenes Digitales.
 
 
-
-28/12: metidas todas las funciones antiguas que hizo Ángel
-
-
-
-
 """
 
 import PIL
@@ -20,6 +14,14 @@ from skimage import io, color,filters
 import itertools as it
 
 
+
+"""
+Funciones auxiliares para la generación de grids y el trabajo con imagenes relativo a este tema.
+"""
+
+"""
+Función que cambia el tamaño de una imagen y devuelve la imagen 
+"""
 
 def thumbnail(nombre_imagen,maximo_tamaño):
     imagen = Image.open(nombre_imagen)
@@ -128,6 +130,11 @@ def visualizar_clusteres(imagen_original,mean_shift_result,formato="RGB",preclus
             resultado[int(puntos_originales[i][0]),int(puntos_originales[i][1])]= color
         return resultado
 
+        
+"""
+Función que genera la imagen con un grid.
+
+"""
 def generar_imagen_con_grid(array_imagen,tam_celda):
     shape = np.shape(array_imagen)
     def suma_pixel(l1,l2):
@@ -142,12 +149,22 @@ def generar_imagen_con_grid(array_imagen,tam_celda):
     resultado = suma_imagenes(array_imagen,grid)
     return np.array(resultado,dtype='uint8')
 
+    
+"""
+Función que genera la imagen con un grid o su intersección, dependiendo de una opción.
+
+"""
 def generar_grid_a_traves_imagen_y_opcion(array_imagen,tam_celda,opcion=0):
     shape = np.shape(array_imagen)
     if(opcion == 0):
         return generar_puntos_interseccion_grid(shape[1],shape[0],tam_celda)
     else:
         return generar_grid_entero(shape[1],shape[0],tam_celda)
+
+"""
+Función que genera el grid entero, pero sin pegarlo a la imagen en si.
+
+"""        
 
 def generar_grid_entero(tam_x,tam_y,tam_celda):
     #Inicialización grid
@@ -183,6 +200,10 @@ def generar_grid_entero(tam_x,tam_y,tam_celda):
             m-=1
     return np.array(grid,dtype='uint8')
 
+    
+"""
+Función que calcula los puntos de intersección del grid y los pega en la imagen y devuelve un array como resultado.
+"""     
 
 def puntos_interseccion(array_imagen,tam_celda):
     grid = generar_grid_a_traves_imagen_y_opcion(array_imagen,tam_celda)
@@ -190,6 +211,10 @@ def puntos_interseccion(array_imagen,tam_celda):
     for (y,x) in grid:
         resultado.append([y,x]+list(array_imagen[y][x]))
     return np.array(resultado)
+    
+"""
+Función que calcula los puntos de intersección del grid.
+"""  
 
 def generar_puntos_interseccion_grid(tam_x,tam_y,tam_celda):
 

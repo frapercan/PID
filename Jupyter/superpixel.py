@@ -11,12 +11,29 @@ from skimage.util import img_as_float
 from skimage import io
 import matplotlib.pyplot as plt
 
+"""
+Clase que implementa las funcionalidades de trabajo con superpixel.
+"""
+
+
 class superpixel(object):
+    """
+    Constructor:
+        nombre_thumbnail: Nombre del thumbnail de la imagen original
+        profundidad: Mapa de profundidad en formato array.
+        nombre_salida: Nombre de la imagen de salida.
+    """
     
     def __init__(self,nombre_thumbnail,profundidad,nombre_salida):
         self.nombre_thumbnail = nombre_thumbnail
         self.profundidad = profundidad
         self.nombre_salida = nombre_salida
+    
+    """
+    Esta función hace el superpixel del thumbnail. Tras eso, accede a las regiones del superpixel y va mirando los
+    valores mas alto de cada región del superpixel en el mapa de profundidad y le asigna el mas alto. Con eso se consigue
+    un mapa superpixel de profundidad.
+    """
         
     def hacer_superpixel(self):
         image = img_as_float(io.imread(self.nombre_thumbnail))
