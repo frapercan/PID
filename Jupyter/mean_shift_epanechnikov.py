@@ -4,8 +4,11 @@ import mean_shift_utils_epanechnikov as ms_utils
 import point_grouper as pg
 
 
-#EN EL ARCHIVO ORIGNAL ESTABA COMO: MIN_DISTANCE = 0.000001
 MIN_DISTANCE = 0.001
+
+"""
+Clase que implementa el algoritmo Meanshift
+"""
 
 class MeanShift(object):
     def __init__(self, kernel=ms_utils.gaussian_kernel):

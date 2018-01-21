@@ -14,6 +14,13 @@ from scipy import ndimage
 from skimage import io
 plt.interactive(True)
 
+
+"""
+Funcion de utilidad que unifica los tres mapas de profundidad, haciendo la media pixel a pixel.
+Guarda en un fichero una unificación de los tres mapas y además devuelve como salida los datos
+de la media de los 3 mapas de profundidad.
+
+"""
 def unificar_eg(prof1,prof2,prof3,directorio_salida):
     prof_media = list()
     for i,p1 in enumerate(prof1):
@@ -42,7 +49,7 @@ class energy_generation(object):
     """
     
     """
-    Constructor
+    Constructor de la clase
     """
     
     def __init__(self,x_y_c,shape,tam_celda,nombre_salida,nombre_grid_interseccion_figura,nombre_morfologia):
@@ -67,32 +74,22 @@ class energy_generation(object):
         img.save(self.nombre_grid_interseccion_figura,'png')
         self.morfologia()
         img = Image.fromarray(self.res,'L')
-        #img = PIL.ImageOps.invert(img)
         img.save(self.nombre_morfologia,'png')
-        
         self.res = np.array(io.imread(self.nombre_morfologia))
-
         data = ndimage.distance_transform_edt(self.res)
         cmap = plt.cm.jet_r
         norm = plt.Normalize(vmin=data.min(), vmax=data.max())
         image = cmap(norm(data))
         plt.imsave(self.nombre_salida, image)
         return data
-        
+    """
+    Esta función forma la intersección de los puntos aislados en forma de grid, de forma que dos puntos aislados
+    se unen si estan a una distancia igual al tamaño de celda y además, esos puntos han sido clasificados como figura.
+    """        
         
     
     def interseccion_grid_figura(self):
-        """
-        Formar un grid con los puntos aislados clasificados como figura.
-        """
         
-        """
-        Idea: Primero se hace una cruz de color blanco en los puntos que son figura. Despues se evaluan los fondos, haciendo cruces
-        de color negro.
-        
-        """
-        
-        #invertir a 0 para invertir
         res = np.asarray(list(it.repeat(list(it.repeat(255,self.shape[1])),self.shape[0])),dtype='uint8')
         lista_fondos = []
         for (x,y,c) in self.x_y_c:
@@ -109,29 +106,12 @@ class energy_generation(object):
                         res[x,y-(i+1)] = 0
             else:
                 lista_fondos.append((x,y))
-        for (x,y) in lista_fondos:
-            for i in range(self.tam_celda):
-                    if(x+(i+1) < self.shape[0]):
-                        res[x+(i+1),y] = 255
-                    if(y+(i+1) < self.shape[1]):    
-                        res[x,y+(i+1)] = 255
-                    if(x-(i+1) >= 0):
-                        res[x-(i+1),y] = 255
-                    if(y-(i+1) >= 0):
-                        res[x,y-(i+1)] = 255
         self.res = res
         
     def morfologia(self):
         
         """
-        Se exploran todos los puntos blancos en cada fila.
-        Si no hay puntos blancos en esa fila, se pasa a la siguiente.
-        En caso contrario, se van almacenando en una lista.
-        Una vez hecho eso, se prepara para que pueda accederse como pares de un elemento y su siguiente.
-        Se accede al primer elemento, para poner pixeles blancos a la izquierda si procede (su distancia
-        a la izquiera es menor que el tamaño de la celda)
-        Una vez hecho eso, se añade por la derecha pixeles blancos comprobando las distancias de los
-        pixeles de la lista de un elemento con el siguiente.
+        Se hace una morfologia en la que se rellenan los grids formados anteriormente que formen cuadrados con el tamaño de la celda.
         """
         res = self.res
         for x in range(self.shape[0]):
